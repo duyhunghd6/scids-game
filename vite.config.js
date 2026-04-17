@@ -7,7 +7,7 @@ export default defineConfig({
     assetsDir: 'assets',
   },
   server: {
-    port: 5173,
+    port: 9998,
     open: true,
   },
 });
