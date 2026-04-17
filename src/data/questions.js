@@ -22,7 +22,9 @@ const TOPICS = [
           'Crust, Inner Core, Mantle, Outer Core'
         ],
         correct: 0,
-        hint: 'Start from the surface where we live and work your way to the very center.'
+        hint: 'Start from the surface where we live and work your way to the very center.',
+        explanation: 'The layers from top to bottom are Crust, Mantle, Outer Core, Inner Core.',
+        image: 'science-volcano-cross-section'
       },
       {
         id: 'es2',
