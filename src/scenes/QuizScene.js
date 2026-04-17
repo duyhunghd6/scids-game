@@ -11,11 +11,8 @@ export class QuizScene extends Phaser.Scene {
     this.score = 0;
     this.currentQ = 0;
     this.answered = false;
-    this.hintShown = false;
-
-    // Assemble questions
+    
     if (this.topicIndex === -1) {
-      // Play all – pick 3 random from each topic (max 15)
       this.questions = [];
       TOPICS.forEach(topic => {
         const shuffled = Phaser.Utils.Array.Shuffle([...topic.questions]);
@@ -40,59 +37,78 @@ export class QuizScene extends Phaser.Scene {
 
     // Background
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x1a1a2e, 0x16213e, 0x0f3460, 0x1a1a2e, 1);
+    bg.fillGradientStyle(0x1a1a2e, 0x1a1a2e, 0x0f3460, 0x0f3460, 1);
     bg.fillRect(0, 0, width, height);
 
-    // Top bar
+    // Platformer World setup
+    this.platforms = this.physics.add.staticGroup();
+    for (let x = 0; x < width; x += 64) {
+      this.platforms.create(x + 32, height - 32, 'ground');
+    }
+
+    this.player = this.physics.add.sprite(50, height - 100, 'player');
+    this.player.setCollideWorldBounds(true);
+    this.physics.add.collider(this.player, this.platforms);
+
+    this.questionBlocks = this.physics.add.staticGroup();
+    
+    // Spread question blocks across the screen
+    const startX = 150;
+    const spacing = (width - 200) / Math.max(1, this.totalQ - 1);
+    
+    this.questions.forEach((q, i) => {
+      const bx = startX + (i * spacing);
+      const by = height - 150 - (i % 2 === 0 ? 0 : 50); // alternate heights slightly
+      const block = this.questionBlocks.create(bx, by, 'qblock');
+      block.setData('questionIndex', i);
+      block.setData('active', true);
+    });
+
+    this.physics.add.collider(this.player, this.questionBlocks, this.hitBlock, null, this);
+
+    this.cursors = this.input.keyboard.createCursorKeys();
+    this.keys = this.input.keyboard.addKeys('W,A,S,D');
+
+    // UI Top bar
     this.createTopBar(width);
 
-    // Content area – will be rebuilt each question
+    // UI Overlay Container (hidden initially)
+    this.uiContainer = this.add.container(0, 0);
+    this.uiContainer.setAlpha(0);
+    
+    const uiBg = this.add.graphics();
+    uiBg.fillStyle(0x000000, 0.85);
+    uiBg.fillRect(0, 0, width, height);
+    this.uiContainer.add(uiBg);
+    
     this.contentContainer = this.add.container(0, 0);
-
-    this.showQuestion();
+    this.uiContainer.add(this.contentContainer);
+    
+    this.isUiActive = false;
   }
 
   createTopBar(width) {
-    // Topic header
     const headerBg = this.add.graphics();
     headerBg.fillStyle(this.topicColor, 0.9);
-    headerBg.fillRect(0, 0, width, 50);
+    headerBg.fillRect(0, 0, width, 40);
 
-    this.add.text(15, 25, `${this.topicEmoji} ${this.topicName}`, {
+    this.add.text(15, 20, `${this.topicEmoji} ${this.topicName}`, {
       fontFamily: 'Arial, sans-serif',
       fontSize: '16px',
       fontStyle: 'bold',
       color: '#ffffff',
     }).setOrigin(0, 0.5);
 
-    // Score display
-    this.scoreText = this.add.text(width - 15, 15, `⭐ ${this.score}`, {
+    this.scoreText = this.add.text(width - 15, 20, `⭐ ${this.score}`, {
       fontFamily: 'Arial, sans-serif',
       fontSize: '16px',
       fontStyle: 'bold',
       color: '#ffd700',
-    }).setOrigin(1, 0);
+    }).setOrigin(1, 0.5);
 
-    // Progress text
-    this.progressText = this.add.text(width - 15, 35, `Q ${this.currentQ + 1}/${this.totalQ}`, {
+    const backBtn = this.add.text(width / 2, 20, 'Exit Level', {
       fontFamily: 'Arial, sans-serif',
-      fontSize: '11px',
-      color: '#ffffffaa',
-    }).setOrigin(1, 0);
-
-    // Progress bar
-    const barY = 50;
-    this.progressBarBg = this.add.graphics();
-    this.progressBarBg.fillStyle(0x333333);
-    this.progressBarBg.fillRect(0, barY, width, 4);
-
-    this.progressBarFill = this.add.graphics();
-    this.updateProgressBar(width);
-
-    // Back button
-    const backBtn = this.add.text(width / 2, 25, '✖', {
-      fontFamily: 'Arial, sans-serif',
-      fontSize: '18px',
+      fontSize: '14px',
       color: '#ffffff88',
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
     backBtn.on('pointerdown', () => {
@@ -100,133 +116,99 @@ export class QuizScene extends Phaser.Scene {
     });
   }
 
-  updateProgressBar(width) {
-    this.progressBarFill.clear();
-    this.progressBarFill.fillStyle(0xe94560);
-    const progress = (this.currentQ) / this.totalQ;
-    this.progressBarFill.fillRect(0, 50, width * progress, 4);
+  hitBlock(player, block) {
+    if (player.body.touching.up && block.body.touching.down && block.getData('active') && !this.isUiActive) {
+      block.setData('active', false);
+      block.setTexture('block_hit');
+      
+      this.tweens.add({
+        targets: block,
+        y: block.y - 10,
+        duration: 100,
+        yoyo: true,
+        onComplete: () => {
+          this.showQuestionUi(block.getData('questionIndex'));
+        }
+      });
+    }
   }
 
-  showQuestion() {
-    const { width, height } = this.scale;
-    this.contentContainer.removeAll(true);
-    this.answered = false;
-    this.hintShown = false;
-
-    if (this.currentQ >= this.totalQ) {
-      this.scene.start('ResultScene', {
-        score: this.score,
-        total: this.totalQ,
-        topicName: this.topicName,
-        topicEmoji: this.topicEmoji,
-        topicColor: this.topicColor,
-        topicIndex: this.topicIndex,
-      });
-      return;
+  update() {
+    if (this.isUiActive) {
+      this.player.setVelocityX(0);
+      return; // Freeze player when UI is open
     }
 
-    const q = this.questions[this.currentQ];
+    const isLeft = this.cursors.left.isDown || this.keys.A.isDown;
+    const isRight = this.cursors.right.isDown || this.keys.D.isDown;
+    const isUp = this.cursors.up.isDown || this.cursors.space.isDown || this.keys.W.isDown;
 
-    // Update header
-    this.progressText.setText(`Q ${this.currentQ + 1}/${this.totalQ}`);
-    this.updateProgressBar(width);
+    if (isLeft) {
+      this.player.setVelocityX(-200);
+    } else if (isRight) {
+      this.player.setVelocityX(200);
+    } else {
+      this.player.setVelocityX(0);
+    }
 
-    // Question number badge
-    const badge = this.add.graphics();
-    badge.fillStyle(this.topicColor, 0.6);
-    badge.fillRoundedRect(width / 2 - 25, 68, 50, 24, 12);
-    this.contentContainer.add(badge);
+    if (isUp && this.player.body.touching.down) {
+      this.player.setVelocityY(-450);
+    }
+  }
 
-    const badgeText = this.add.text(width / 2, 80, `${this.currentQ + 1}/${this.totalQ}`, {
-      fontFamily: 'Arial, sans-serif',
-      fontSize: '12px',
-      fontStyle: 'bold',
-      color: '#ffffff',
-    }).setOrigin(0.5);
-    this.contentContainer.add(badgeText);
+  showQuestionUi(index) {
+    this.isUiActive = true;
+    this.answered = false;
+    this.contentContainer.removeAll(true);
+    const q = this.questions[index];
+    const { width, height } = this.scale;
 
-    // Question text
     const questionText = this.add.text(width / 2, 130, q.question, {
       fontFamily: 'Arial, sans-serif',
-      fontSize: '16px',
+      fontSize: '18px',
+      fontStyle: 'bold',
       color: '#ffffff',
       align: 'center',
-      wordWrap: { width: width - 80 },
-      lineSpacing: 6,
+      wordWrap: { width: width - 100 },
+      lineSpacing: 8,
     }).setOrigin(0.5);
     this.contentContainer.add(questionText);
 
-    // Calculate answer button positions
-    const qTextBottom = questionText.y + questionText.height / 2;
-    const btnStartY = Math.max(qTextBottom + 30, 200);
-    const btnW = 340;
-    const btnH = 48;
-    const btnGap = 10;
+    const btnStartY = 220;
+    const btnW = 400;
+    const btnH = 50;
+    const btnGap = 15;
 
-    // Answer buttons
     q.options.forEach((option, i) => {
       const btnY = btnStartY + i * (btnH + btnGap);
       this.createAnswerButton(width / 2, btnY, btnW, btnH, option, i, q);
     });
 
-    // Hint button
-    const hintY = btnStartY + q.options.length * (btnH + btnGap) + 10;
-    this.createHintButton(width / 2, hintY, q.hint);
-
-    // Entrance animation
-    this.contentContainer.setAlpha(0);
-    this.tweens.add({ targets: this.contentContainer, alpha: 1, duration: 300 });
+    this.tweens.add({ targets: this.uiContainer, alpha: 1, duration: 200 });
   }
 
   createAnswerButton(x, y, w, h, text, index, question) {
     const container = this.add.container(x, y);
 
-    const letterLabels = ['A', 'B', 'C', 'D'];
-
-    // Button background
     const bg = this.add.graphics();
-    bg.fillStyle(0x2d2d5e, 0.9);
+    bg.fillStyle(0x2d2d5e, 1);
     bg.fillRoundedRect(-w / 2, -h / 2, w, h, 12);
-    bg.lineStyle(2, 0x4a4a8a, 0.8);
+    bg.lineStyle(2, 0x4a4a8a, 1);
     bg.strokeRoundedRect(-w / 2, -h / 2, w, h, 12);
 
-    // Letter badge
-    const letterBg = this.add.graphics();
-    letterBg.fillStyle(0x4a4a8a);
-    letterBg.fillCircle(-w / 2 + 24, 0, 14);
-
-    const letter = this.add.text(-w / 2 + 24, 0, letterLabels[index], {
+    const label = this.add.text(0, 0, text, {
       fontFamily: 'Arial, sans-serif',
-      fontSize: '13px',
-      fontStyle: 'bold',
+      fontSize: '14px',
       color: '#ffffff',
+      wordWrap: { width: w - 40 },
+      align: 'center'
     }).setOrigin(0.5);
 
-    // Answer text
-    const label = this.add.text(-w / 2 + 50, 0, text, {
-      fontFamily: 'Arial, sans-serif',
-      fontSize: '13px',
-      color: '#ffffff',
-      wordWrap: { width: w - 75 },
-    }).setOrigin(0, 0.5);
-
-    container.add([bg, letterBg, letter, label]);
+    container.add([bg, label]);
     this.contentContainer.add(container);
 
-    // Hit area
     const hitArea = this.add.rectangle(x, y, w, h, 0x000000, 0).setInteractive({ useHandCursor: true });
     this.contentContainer.add(hitArea);
-
-    hitArea.on('pointerover', () => {
-      if (!this.answered) {
-        this.tweens.add({ targets: container, scaleX: 1.03, scaleY: 1.03, duration: 100 });
-      }
-    });
-    hitArea.on('pointerout', () => {
-      if (!this.answered) {
-        this.tweens.add({ targets: container, scaleX: 1, scaleY: 1, duration: 100 });
-      }
-    });
 
     hitArea.on('pointerdown', () => {
       if (this.answered) return;
@@ -236,50 +218,26 @@ export class QuizScene extends Phaser.Scene {
       if (isCorrect) {
         this.score += 10;
         this.scoreText.setText(`⭐ ${this.score}`);
-
-        // Green glow
         bg.clear();
-        bg.fillStyle(0x27ae60, 0.95);
+        bg.fillStyle(0x27ae60, 1);
         bg.fillRoundedRect(-w / 2, -h / 2, w, h, 12);
 
-        // Bounce
-        this.tweens.add({
-          targets: container,
-          scaleX: 1.1, scaleY: 1.1,
-          duration: 150, yoyo: true,
-        });
-
-        // Confetti!
-        this.createConfetti(x, y);
-
-        // Correct feedback
-        const feedback = this.add.text(this.scale.width / 2, this.scale.height - 50, '✅ Correct! Well done!', {
+        const feedback = this.add.text(this.scale.width / 2, y + h + 20, '✅ Correct!', {
           fontFamily: 'Arial, sans-serif',
-          fontSize: '18px',
+          fontSize: '20px',
           fontStyle: 'bold',
           color: '#2ecc71',
         }).setOrigin(0.5);
         this.contentContainer.add(feedback);
-
       } else {
-        // Red shake
         bg.clear();
-        bg.fillStyle(0xe74c3c, 0.95);
+        bg.fillStyle(0xe74c3c, 1);
         bg.fillRoundedRect(-w / 2, -h / 2, w, h, 12);
 
-        this.tweens.add({
-          targets: container,
-          x: container.x - 8,
-          duration: 50,
-          yoyo: true,
-          repeat: 3,
-        });
-
-        // Show correct answer
-        const feedback = this.add.text(this.scale.width / 2, this.scale.height - 50,
+        const feedback = this.add.text(this.scale.width / 2, y + h + 20,
           `❌ The answer is: ${question.options[question.correct]}`, {
           fontFamily: 'Arial, sans-serif',
-          fontSize: '14px',
+          fontSize: '16px',
           color: '#e74c3c',
           align: 'center',
           wordWrap: { width: this.scale.width - 60 },
@@ -287,73 +245,31 @@ export class QuizScene extends Phaser.Scene {
         this.contentContainer.add(feedback);
       }
 
-      // Next question after delay
-      this.time.delayedCall(isCorrect ? 1200 : 2200, () => {
+      this.time.delayedCall(isCorrect ? 1000 : 2000, () => {
+        this.closeUiAndCheckLevelEnd();
+      });
+    });
+  }
+
+  closeUiAndCheckLevelEnd() {
+    this.tweens.add({
+      targets: this.uiContainer,
+      alpha: 0,
+      duration: 200,
+      onComplete: () => {
+        this.isUiActive = false;
         this.currentQ++;
-        this.showQuestion();
-      });
+        if (this.currentQ >= this.totalQ) {
+          this.scene.start('ResultScene', {
+            score: this.score,
+            total: this.totalQ,
+            topicName: this.topicName,
+            topicEmoji: this.topicEmoji,
+            topicColor: this.topicColor,
+            topicIndex: this.topicIndex,
+          });
+        }
+      }
     });
-  }
-
-  createHintButton(x, y, hintText) {
-    const container = this.add.container(x, y);
-
-    const label = this.add.text(0, 0, '💡 Show Hint', {
-      fontFamily: 'Arial, sans-serif',
-      fontSize: '12px',
-      color: '#f39c12',
-    }).setOrigin(0.5);
-
-    container.add([label]);
-    this.contentContainer.add(container);
-
-    label.setInteractive({ useHandCursor: true });
-    label.on('pointerdown', () => {
-      if (this.hintShown) return;
-      this.hintShown = true;
-
-      label.setText('');
-
-      const hintBg = this.add.graphics();
-      hintBg.fillStyle(0xf39c12, 0.2);
-      hintBg.fillRoundedRect(-160, 8, 320, 35, 8);
-      container.add(hintBg);
-
-      const hint = this.add.text(0, 25, `💡 ${hintText}`, {
-        fontFamily: 'Arial, sans-serif',
-        fontSize: '11px',
-        color: '#f39c12',
-        align: 'center',
-        wordWrap: { width: 300 },
-      }).setOrigin(0.5);
-      container.add(hint);
-    });
-  }
-
-  createConfetti(x, y) {
-    const colors = [0xe94560, 0xffd700, 0x2ecc71, 0x3498db, 0x9b59b6, 0xf39c12];
-    for (let i = 0; i < 15; i++) {
-      const size = Phaser.Math.Between(4, 8);
-      const confetti = this.add.graphics();
-      confetti.fillStyle(Phaser.Utils.Array.GetRandom(colors));
-      confetti.fillRect(-size / 2, -size / 2, size, size);
-      confetti.setPosition(x, y);
-      this.contentContainer.add(confetti);
-
-      const angle = Phaser.Math.Between(0, 360);
-      const speed = Phaser.Math.Between(100, 250);
-      const dx = Math.cos(Phaser.Math.DegToRad(angle)) * speed;
-      const dy = Math.sin(Phaser.Math.DegToRad(angle)) * speed - 150;
-
-      this.tweens.add({
-        targets: confetti,
-        x: confetti.x + dx,
-        y: confetti.y + dy + 200,
-        alpha: 0,
-        angle: Phaser.Math.Between(-360, 360),
-        duration: Phaser.Math.Between(600, 1200),
-        ease: 'Quad.easeOut',
-      });
-    }
   }
 }

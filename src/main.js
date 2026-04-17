@@ -14,7 +14,14 @@ const config = {
     width: 800,
     height: 600,
   },
-  backgroundColor: '#1a1a2e',
+  backgroundColor: '#5C94FC', // Mario sky blue
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 800 },
+      debug: false
+    }
+  },
   scene: [BootScene, PreloadScene, MenuScene, QuizScene, ResultScene],
 };
 
