@@ -3,6 +3,7 @@
 ## Epic: Mario-Style Platformer Adaptation
 <!-- unid-meta
 unid: epic:scids:mario-adaptation
+beads_id: scids-game-1yg
 fulfills:
   - prd:scids:core-features
 -->
@@ -13,6 +14,7 @@ fulfills:
 ### Story: Physics Engine & Tilemap Foundation
 <!-- unid-meta
 unid: story:scids:mario-physics
+beads_id: scids-game-1yg.1
 fulfills:
   - epic:scids:mario-adaptation
   - arch:game-design:12-domains
@@ -28,6 +30,7 @@ fulfills:
 ### Story: Scene Pipeline Refactoring
 <!-- unid-meta
 unid: story:scids:scene-refactor
+beads_id: scids-game-1yg.2
 fulfills:
   - epic:scids:mario-adaptation
   - arch:game-design:exploration-pipeline
@@ -39,6 +42,7 @@ fulfills:
 ### Story: Mandatory Question Blocks & Assessment Zones
 <!-- unid-meta
 unid: story:scids:question-blocks
+beads_id: scids-game-1yg.3
 fulfills:
   - epic:scids:mario-adaptation
   - arch:game-design:triggers
@@ -50,6 +54,7 @@ fulfills:
 ### Story: Dedicated Quiz Overlay UI (Procedural Fallback)
 <!-- unid-meta
 unid: story:scids:quiz-overlay
+beads_id: scids-game-1yg.4
 fulfills:
   - epic:scids:mario-adaptation
   - arch:game-design:action-challenges
@@ -66,6 +71,7 @@ fulfills:
 ## Epic: Advanced Gamification (The "Fun" Factor)
 <!-- unid-meta
 unid: epic:scids:advanced-gamification
+beads_id: scids-game-3gt
 fulfills:
   - arch:game-design:gamification-proposals
 -->
@@ -74,6 +80,7 @@ fulfills:
 ### Story: Subject-Specific Power-Ups
 <!-- unid-meta
 unid: story:scids:power-ups
+beads_id: scids-game-3gt.1
 fulfills:
   - arch:game-design:power-ups
 -->
@@ -82,6 +89,7 @@ fulfills:
 ### Story: Knowledge "Boss Fights"
 <!-- unid-meta
 unid: story:scids:boss-fights
+beads_id: scids-game-3gt.2
 fulfills:
   - arch:game-design:boss-fights
 -->
@@ -90,6 +98,7 @@ fulfills:
 ### Story: Secret Assessment Zones (Warp Pipes)
 <!-- unid-meta
 unid: story:scids:warp-pipes
+beads_id: scids-game-3gt.3
 fulfills:
   - arch:game-design:secret-zones
 -->
@@ -98,6 +107,7 @@ fulfills:
 ### Story: The "Curiosity" Combo Meter
 <!-- unid-meta
 unid: story:scids:combo-meter
+beads_id: scids-game-3gt.4
 fulfills:
   - arch:game-design:combo-meter
 -->
@@ -106,6 +116,7 @@ fulfills:
 ### Story: The Science Lab Hub World
 <!-- unid-meta
 unid: story:scids:hub-world
+beads_id: scids-game-3gt.5
 fulfills:
   - arch:game-design:hub-world
 -->
@@ -116,6 +127,7 @@ fulfills:
 ## Epic: Create Missing Assets
 <!-- unid-meta
 unid: epic:scids:create-missing-assets
+beads_id: scids-game-1oz
 fulfills:
   - arch:game-design:asset-inventory
 -->
@@ -124,6 +136,7 @@ fulfills:
 ### Story: Download Existing Arcade Assets
 <!-- unid-meta
 unid: story:scids:download-existing-assets
+beads_id: scids-game-1oz.1
 fulfills:
   - epic:scids:create-missing-assets
   - arch:game-design:current-assets
@@ -133,6 +146,7 @@ fulfills:
 ### Story: Generate Complex Science Diagrams
 <!-- unid-meta
 unid: story:scids:generate-science-diagrams
+beads_id: scids-game-1oz.2
 fulfills:
   - epic:scids:create-missing-assets
   - arch:game-design:missing-assets
@@ -142,6 +156,7 @@ fulfills:
 ### Story: Implement Procedural Fallback Graphics
 <!-- unid-meta
 unid: story:scids:procedural-fallback
+beads_id: scids-game-1oz.3
 fulfills:
   - epic:scids:create-missing-assets
   - arch:game-design:flexible-strategy
@@ -153,6 +168,7 @@ fulfills:
 ## Epic: Curriculum Implementation
 <!-- unid-meta
 unid: epic:scids:curriculum-implementation
+beads_id: scids-game-kxo
 fulfills:
   - arch:game-design:12-domains
 -->
@@ -161,6 +177,7 @@ fulfills:
 ### Story: Earth & Space Sciences Level Design
 <!-- unid-meta
 unid: story:scids:earth-space-levels
+beads_id: scids-game-kxo.1
 fulfills:
   - epic:scids:curriculum-implementation
   - prd:scids:domain-earth-space
@@ -174,6 +191,7 @@ fulfills:
 ### Story: Life Sciences Level Design
 <!-- unid-meta
 unid: story:scids:life-sciences-levels
+beads_id: scids-game-kxo.2
 fulfills:
   - epic:scids:curriculum-implementation
   - prd:scids:domain-life-sciences
@@ -187,6 +205,7 @@ fulfills:
 ### Story: Physical Sciences Level Design
 <!-- unid-meta
 unid: story:scids:physical-sciences-levels
+beads_id: scids-game-kxo.3
 fulfills:
   - epic:scids:curriculum-implementation
   - prd:scids:domain-physical-sciences
@@ -202,6 +221,7 @@ fulfills:
 ## Epic: Core Educational Architecture
 <!-- unid-meta
 unid: epic:scids:educational-architecture
+beads_id: scids-game-hp0
 fulfills:
   - prd:scids:overview
   - prd:scids:goals
@@ -214,6 +234,7 @@ fulfills:
 ### Story: Data Ingestion & UNID Tracking
 <!-- unid-meta
 unid: story:scids:data-ingestion
+beads_id: scids-game-hp0.1
 fulfills:
   - epic:scids:educational-architecture
   - prd:scids:unid-arch
@@ -225,6 +246,7 @@ fulfills:
 ### Story: Renderer and Engine Boot Setup
 <!-- unid-meta
 unid: story:scids:engine-boot
+beads_id: scids-game-hp0.2
 fulfills:
   - epic:scids:educational-architecture
   - arch:scids:rendering
@@ -234,6 +256,7 @@ fulfills:
 ### Story: Complete Assessment & Scene Feedback Loop
 <!-- unid-meta
 unid: story:scids:assessment-feedback-loop
+beads_id: scids-game-hp0.3
 fulfills:
   - epic:scids:educational-architecture
   - arch:game-design:assessment-loop
