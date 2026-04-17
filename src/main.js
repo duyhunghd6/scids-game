@@ -3,6 +3,7 @@ import { BootScene } from './scenes/BootScene.js';
 import { PreloadScene } from './scenes/PreloadScene.js';
 import { MenuScene } from './scenes/MenuScene.js';
 import { QuizScene } from './scenes/QuizScene.js';
+import { BossScene } from './scenes/BossScene.js';
 import { ResultScene } from './scenes/ResultScene.js';
 
 const config = {
@@ -22,7 +23,7 @@ const config = {
       debug: false
     }
   },
-  scene: [BootScene, PreloadScene, MenuScene, QuizScene, ResultScene],
+  scene: [BootScene, PreloadScene, MenuScene, QuizScene, BossScene, ResultScene],
 };
 
 const game = new Phaser.Game(config);

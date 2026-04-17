@@ -12,11 +12,17 @@ export class ResultScene extends Phaser.Scene {
     this.topicEmoji = data.topicEmoji ?? '🧪';
     this.topicColor = data.topicColor ?? 0xe94560;
     this.topicIndex = data.topicIndex ?? 0;
+    this.bossHits = data.bossHits ?? 0;
+    this.bossTotal = data.bossTotal ?? 0;
+    this.bossWon = data.bossWon ?? false;
+    this.earnedCoins = Math.max(1, Math.round(this.score / 10));
   }
 
   create() {
     const { width, height } = this.scale;
     const percentage = Math.round((this.score / (this.total * 10)) * 100);
+    const currentCoins = this.registry.get('hubCoins') ?? 0;
+    this.registry.set('hubCoins', currentCoins + this.earnedCoins);
 
     // Background
     const bg = this.add.graphics();
@@ -107,12 +113,30 @@ export class ResultScene extends Phaser.Scene {
       color: '#cccccc',
     }).setOrigin(0.5);
 
+    this.add.text(cardX, cardY + 90, `Coins earned: +${this.earnedCoins}`, {
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '15px',
+      fontStyle: 'bold',
+      color: '#ffd700',
+    }).setOrigin(0.5);
+
+    if (this.bossTotal > 0) {
+      const bossLabel = this.bossWon ? 'Boss defeated' : 'Boss survived';
+      const bossColor = this.bossWon ? '#4ade80' : '#fca5a5';
+      this.add.text(cardX, cardY + 112, `${bossLabel} · ${this.bossHits}/${this.bossTotal} hits`, {
+        fontFamily: 'Arial, sans-serif',
+        fontSize: '14px',
+        fontStyle: 'bold',
+        color: bossColor,
+      }).setOrigin(0.5);
+    }
+
     // Buttons
-    this.createButton(cardX - 85, cardY + 115, 150, 40, '🔄 Try Again', 0xe94560, () => {
+    this.createButton(cardX - 85, cardY + 145, 150, 40, '🔄 Try Again', 0xe94560, () => {
       this.scene.start('QuizScene', { topicIndex: this.topicIndex });
     });
 
-    this.createButton(cardX + 85, cardY + 115, 150, 40, '📚 Topics', 0x3498db, () => {
+    this.createButton(cardX + 85, cardY + 145, 150, 40, '📚 Topics', 0x3498db, () => {
       this.scene.start('MenuScene');
     });
   }
