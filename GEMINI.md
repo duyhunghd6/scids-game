@@ -12,6 +12,7 @@ The `./docs` directory is the SSOT for all project knowledge, architecture decis
   - `json/*.json`: Original source content (e.g., exams and slide presentations) that agents parse to generate playable quizzes.
 - **`docs/architect/` (System Architecture)**:
   - `Architecture.md`: Defines the technical stack (Phaser 4, Vite), the scene management pipeline, rendering strategies, and data flows.
+  - `game-design.md`: Defines the Mario-style game mechanics, the Assessment Loop, gamification elements, and the asset strategy as a core part of the SSOT.
 - **`docs/plan/` (Sprint Planning & Reports)**:
   - `sprint-*.md`: Incremental sprint reports (e.g., `sprint-1.md`) capturing what was built, agent verifications, and next steps for the cycle.
 - **`docs/tests/` (Testing & Verification)**:

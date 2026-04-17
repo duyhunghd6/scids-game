@@ -4,3 +4,6 @@ dist/
 *.log
 .env
 .phaser-tmp/
+
+# bv (beads viewer) local config and caches
+.bv/
