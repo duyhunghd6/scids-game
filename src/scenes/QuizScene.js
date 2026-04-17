@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import TOPICS from '../data/questions.js';
+import { StateStore } from '../data/StateStore.js';
 
 const TILE_SIZE = 64;
 const BASE_MOVE_SPEED = 200;
@@ -92,6 +93,7 @@ export class QuizScene extends Phaser.Scene {
     this.createSubjectPowerCourse(width, height);
 
     this.questionBlocks = this.physics.add.staticGroup();
+    this.assessmentWalls = this.physics.add.staticGroup();
 
     const startX = 150;
     const spacing = (width - 200) / Math.max(1, this.totalQ - 1);
@@ -102,13 +104,26 @@ export class QuizScene extends Phaser.Scene {
       const block = this.questionBlocks.create(bx, by, 'qblock');
       block.setData('questionIndex', i);
       block.setData('active', true);
+      
+      // Assessment Zone Wall (invisible gate that blocks progress)
+      const wall = this.assessmentWalls.create(bx + 40, height - 80, 'blank'); // Make it an invisible physics body
+      wall.body.setSize(20, height); 
+      wall.setVisible(false);
+      block.setData('wall', wall);
     });
 
-    this.secretPipe = this.physics.add.staticImage(width - 120, height - 80, 'warp_pipe');
+    this.secretPipe = this.physics.add.staticImage(width - 400, height - 80, 'warp_pipe');
     this.secretPipe.setOrigin(0.5, 1);
     this.secretPipe.body.setSize(44, 78).setOffset(10, 18);
 
+    this.exitPipe = this.physics.add.staticImage(width - 50, height - 80, 'warp_pipe');
+    this.exitPipe.setOrigin(0.5, 1);
+    this.exitPipe.body.setSize(44, 78).setOffset(10, 18);
+    this.exitPipe.setTint(0x9be564); // Tint green to distinguish as exit
+
     this.physics.add.collider(this.player, this.secretPipe);
+    this.physics.add.collider(this.player, this.exitPipe);
+    this.physics.add.collider(this.player, this.assessmentWalls);
     this.physics.add.collider(this.player, this.questionBlocks, this.hitBlock, null, this);
 
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -136,9 +151,31 @@ export class QuizScene extends Phaser.Scene {
   createLevelTilemap() {
     const columns = Math.ceil(this.scale.width / TILE_SIZE);
     const rows = Math.ceil(this.scale.height / TILE_SIZE);
+    
+    // Default flat ground
     const data = Array.from({ length: rows }, (_, row) => (
       Array.from({ length: columns }, () => (row === rows - 1 ? 1 : -1))
     ));
+    
+    // Topic specific terrain variation
+    if (this.topicId === 'volcanoes' || this.topicId === 'earth-structure') {
+      // Create a pit
+      data[rows - 1][4] = -1;
+      data[rows - 1][5] = -1;
+      // Add platform
+      data[rows - 3][8] = 1;
+      data[rows - 3][9] = 1;
+    } else if (this.topicId === 'ecosystems' || this.topicId === 'animal-adaptations') {
+      // Create stair-steps
+      data[rows - 2][3] = 1;
+      data[rows - 3][4] = 1;
+      data[rows - 4][7] = 1;
+    } else if (this.topicId === 'light-reflection' || this.topicId === 'electrical-circuits') {
+      // Create tall walls and elevated areas
+      data[rows - 2][2] = 1;
+      data[rows - 3][2] = 1;
+      data[rows - 4][5] = 1;
+    }
 
     const map = this.make.tilemap({
       data,
@@ -392,7 +429,7 @@ export class QuizScene extends Phaser.Scene {
         duration: 100,
         yoyo: true,
         onComplete: () => {
-          this.showQuestionUi(block.getData('questionIndex'));
+          this.showQuestionUi(block.getData('questionIndex'), block);
         }
       });
     }
@@ -453,7 +490,11 @@ export class QuizScene extends Phaser.Scene {
     const isRight = this.cursors.right.isDown || this.keys.D.isDown;
     const isUp = this.cursors.up.isDown || this.cursors.space.isDown || this.keys.W.isDown;
     const isDown = this.cursors.down.isDown || this.keys.S.isDown;
-    const nearPipe = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.secretPipe.x, this.secretPipe.y - 20) < 72;
+    
+    // Check for secret pipe entry
+    const nearSecretPipe = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.secretPipe.x, this.secretPipe.y - 20) < 60;
+    // Check for level exit
+    const nearExit = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.exitPipe.x, this.exitPipe.y - 20) < 60;
 
     if (this.flowGlow.visible) {
       this.flowGlow.setPosition(this.player.x, this.player.y);
@@ -480,7 +521,7 @@ export class QuizScene extends Phaser.Scene {
       this.startPhotonDash(isLeft, isRight, isUp, isDown);
     }
 
-    if (nearPipe && !this.secretZoneCleared) {
+    if (nearSecretPipe && !this.secretZoneCleared) {
       this.secretPrompt.setAlpha(1);
       this.secretPromptVisible = true;
       if (Phaser.Input.Keyboard.JustDown(this.cursors.down) || Phaser.Input.Keyboard.JustDown(this.keys.S)) {
@@ -491,14 +532,24 @@ export class QuizScene extends Phaser.Scene {
       this.secretPromptVisible = false;
     }
 
+    // Handle level exit pipe explicitly
+    if (nearExit && this.currentQ >= this.totalQ) {
+       // Reached exit after all questions
+       if (Phaser.Input.Keyboard.JustDown(this.cursors.down) || Phaser.Input.Keyboard.JustDown(this.keys.S)) {
+          this.endLevel();
+       }
+    }
+
     if (isUp && this.player.body.blocked.down) {
       this.player.setVelocityY(-jumpSpeed);
     }
   }
 
-  showQuestionUi(index) {
+  showQuestionUi(index, block) {
+    this.physics.pause();
     this.isUiActive = true;
     this.answered = false;
+    this.currentActiveBlock = block;
     this.contentContainer.removeAll(true);
     const q = this.questions[index];
     const { width, height } = this.scale;
@@ -554,6 +605,7 @@ export class QuizScene extends Phaser.Scene {
       if (this.answered) return;
       this.answered = true;
       const isCorrect = index === question.correct;
+      StateStore.recordAnswer(question.id, isCorrect);
 
       if (isCorrect) {
         this.score += 10;
@@ -584,7 +636,7 @@ export class QuizScene extends Phaser.Scene {
         bg.fillRoundedRect(-w / 2, -h / 2, w, h, 12);
 
         const feedback = this.add.text(this.scale.width / 2, y + h + 20,
-          `❌ The answer is: ${question.options[question.correct]}`, {
+          `❌ Coaching: ${question.coaching_hint || question.explanation || 'Try again!'} The answer was: ${question.options[question.correct]}`, {
           fontFamily: 'Arial, sans-serif',
           fontSize: '16px',
           color: '#e74c3c',
@@ -594,13 +646,14 @@ export class QuizScene extends Phaser.Scene {
         this.contentContainer.add(feedback);
       }
 
-      this.time.delayedCall(isCorrect ? 1000 : 2000, () => {
-        this.closeUiAndCheckLevelEnd();
+      this.time.delayedCall(isCorrect ? 1000 : 2500, () => {
+        this.closeUiAndCheckLevelEnd(isCorrect);
       });
     });
   }
 
   showSecretQuestionUi() {
+    this.physics.pause();
     this.isUiActive = true;
     this.answered = false;
     this.contentContainer.removeAll(true);
@@ -672,6 +725,7 @@ export class QuizScene extends Phaser.Scene {
       if (this.answered) return;
       this.answered = true;
       const isCorrect = index === question.correct;
+      StateStore.recordAnswer(question.id, isCorrect);
 
       bg.clear();
       bg.fillStyle(isCorrect ? 0x27ae60 : 0xe74c3c, 1);
@@ -706,35 +760,51 @@ export class QuizScene extends Phaser.Scene {
           duration: 200,
           onComplete: () => {
             this.isUiActive = false;
+            this.physics.resume();
           }
         });
       });
     });
   }
 
-  closeUiAndCheckLevelEnd() {
+  closeUiAndCheckLevelEnd(isCorrect) {
     this.tweens.add({
       targets: this.uiContainer,
       alpha: 0,
       duration: 200,
       onComplete: () => {
         this.isUiActive = false;
-        this.currentQ++;
-        if (this.currentQ >= this.totalQ) {
-          this.scene.start('BossScene', {
-            score: this.score,
-            total: this.totalQ,
-            topicName: this.topicName,
-            topicEmoji: this.topicEmoji,
-            topicColor: this.topicColor,
-            topicIndex: this.topicIndex,
-            galileoBadges: this.galileoBadges,
-            flowState: this.isFlowStateActive,
-            powerUpName: this.subjectPowerUnlocked ? this.powerUpName : null,
-            secretZoneCleared: this.secretZoneCleared,
-          });
+        this.physics.resume();
+        
+        if (isCorrect) {
+          this.currentQ++;
+          if (this.currentActiveBlock) {
+             const wall = this.currentActiveBlock.getData('wall');
+             if (wall) wall.destroy();
+          }
+        } else {
+          // If failed, restore the block for another try. It acts as a gate.
+          if (this.currentActiveBlock) {
+            this.currentActiveBlock.setData('active', true);
+            this.currentActiveBlock.setTexture('qblock');
+          }
         }
       }
+    });
+  }
+
+  endLevel() {
+    this.scene.start('BossScene', {
+      score: this.score,
+      total: this.totalQ,
+      topicName: this.topicName,
+      topicEmoji: this.topicEmoji,
+      topicColor: this.topicColor,
+      topicIndex: this.topicIndex,
+      galileoBadges: this.galileoBadges,
+      flowState: this.isFlowStateActive,
+      powerUpName: this.subjectPowerUnlocked ? this.powerUpName : null,
+      secretZoneCleared: this.secretZoneCleared,
     });
   }
 }

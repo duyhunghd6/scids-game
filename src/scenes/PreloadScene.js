@@ -6,9 +6,9 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('science-volcano-cross-section', 'assets/science/volcano-cross-section.png');
-    this.load.image('science-human-skeleton', 'assets/science/human-skeleton.png');
-    this.load.image('science-circuit-components', 'assets/science/circuit-components.png');
+    this.load.image('science-volcano-cross-section', 'assets/diagrams/volcano_cross_section.png');
+    this.load.image('science-human-skeleton', 'assets/diagrams/human_skeleton.png');
+    this.load.image('science-circuit-components', 'assets/diagrams/electrical_circuit.png');
   }
 
   create() {

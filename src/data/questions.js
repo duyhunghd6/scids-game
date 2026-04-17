@@ -559,4 +559,12 @@ const TOPICS = [
   }
 ];
 
-export default TOPICS;
+import { DataLoader } from './DataLoader.js';
+
+// We merge the hardcoded TOPICS and the procedurally loaded JSONs
+const loadedTopics = DataLoader.parse();
+
+// Export merged array so existing game flow doesn't break while gaining full UNID dataset
+const mergedTopics = [...TOPICS, ...loadedTopics];
+
+export default mergedTopics;
