@@ -1,6 +1,8 @@
 import * as Phaser from 'phaser';
 import TOPICS from '../data/questions.js';
 
+const TILE_SIZE = 64;
+
 export class QuizScene extends Phaser.Scene {
   constructor() {
     super({ key: 'QuizScene' });
@@ -11,7 +13,7 @@ export class QuizScene extends Phaser.Scene {
     this.score = 0;
     this.currentQ = 0;
     this.answered = false;
-    
+
     if (this.topicIndex === -1) {
       this.questions = [];
       TOPICS.forEach(topic => {
@@ -35,30 +37,25 @@ export class QuizScene extends Phaser.Scene {
   create() {
     const { width, height } = this.scale;
 
-    // Background
     const bg = this.add.graphics();
     bg.fillGradientStyle(0x1a1a2e, 0x1a1a2e, 0x0f3460, 0x0f3460, 1);
     bg.fillRect(0, 0, width, height);
 
-    // Platformer World setup
-    this.platforms = this.physics.add.staticGroup();
-    for (let x = 0; x < width; x += 64) {
-      this.platforms.create(x + 32, height - 32, 'ground');
-    }
+    this.createLevelTilemap();
 
     this.player = this.physics.add.sprite(50, height - 100, 'player');
     this.player.setCollideWorldBounds(true);
-    this.physics.add.collider(this.player, this.platforms);
+    this.physics.world.setBounds(0, 0, width, height);
+    this.physics.add.collider(this.player, this.groundLayer);
 
     this.questionBlocks = this.physics.add.staticGroup();
-    
-    // Spread question blocks across the screen
+
     const startX = 150;
     const spacing = (width - 200) / Math.max(1, this.totalQ - 1);
-    
+
     this.questions.forEach((q, i) => {
       const bx = startX + (i * spacing);
-      const by = height - 150 - (i % 2 === 0 ? 0 : 50); // alternate heights slightly
+      const by = height - 150 - (i % 2 === 0 ? 0 : 50);
       const block = this.questionBlocks.create(bx, by, 'qblock');
       block.setData('questionIndex', i);
       block.setData('active', true);
@@ -69,22 +66,38 @@ export class QuizScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys('W,A,S,D');
 
-    // UI Top bar
     this.createTopBar(width);
 
-    // UI Overlay Container (hidden initially)
     this.uiContainer = this.add.container(0, 0);
     this.uiContainer.setAlpha(0);
-    
+
     const uiBg = this.add.graphics();
     uiBg.fillStyle(0x000000, 0.85);
     uiBg.fillRect(0, 0, width, height);
     this.uiContainer.add(uiBg);
-    
+
     this.contentContainer = this.add.container(0, 0);
     this.uiContainer.add(this.contentContainer);
-    
+
     this.isUiActive = false;
+  }
+
+  createLevelTilemap() {
+    const columns = Math.ceil(this.scale.width / TILE_SIZE);
+    const rows = Math.ceil(this.scale.height / TILE_SIZE);
+    const data = Array.from({ length: rows }, (_, row) => (
+      Array.from({ length: columns }, () => (row === rows - 1 ? 1 : -1))
+    ));
+
+    const map = this.make.tilemap({
+      data,
+      tileWidth: TILE_SIZE,
+      tileHeight: TILE_SIZE,
+    });
+
+    const tileset = map.addTilesetImage('ground', 'ground', TILE_SIZE, TILE_SIZE, 0, 0);
+    this.groundLayer = map.createLayer(0, tileset, 0, 0);
+    this.groundLayer.setCollision(1);
   }
 
   createTopBar(width) {
@@ -120,7 +133,7 @@ export class QuizScene extends Phaser.Scene {
     if (player.body.touching.up && block.body.touching.down && block.getData('active') && !this.isUiActive) {
       block.setData('active', false);
       block.setTexture('block_hit');
-      
+
       this.tweens.add({
         targets: block,
         y: block.y - 10,
@@ -136,7 +149,7 @@ export class QuizScene extends Phaser.Scene {
   update() {
     if (this.isUiActive) {
       this.player.setVelocityX(0);
-      return; // Freeze player when UI is open
+      return;
     }
 
     const isLeft = this.cursors.left.isDown || this.keys.A.isDown;
@@ -151,7 +164,7 @@ export class QuizScene extends Phaser.Scene {
       this.player.setVelocityX(0);
     }
 
-    if (isUp && this.player.body.touching.down) {
+    if (isUp && this.player.body.blocked.down) {
       this.player.setVelocityY(-450);
     }
   }
