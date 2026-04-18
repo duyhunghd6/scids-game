@@ -80,6 +80,9 @@ export class QuizScene extends Phaser.Scene {
     bg.fillGradientStyle(0x1a1a2e, 0x1a1a2e, 0x0f3460, 0x0f3460, 1);
     bg.fillRect(0, 0, width, height);
 
+    this.bgSky = this.add.tileSprite(width, height/2, width*4, height, 'bg_sky').setScrollFactor(0);
+    this.bgSky.setAlpha(0.2);
+
     this.createLevelTilemap();
 
     const spawnX = this.returnFromSecret ? 90 : 50;
@@ -87,7 +90,12 @@ export class QuizScene extends Phaser.Scene {
     this.player = this.physics.add.sprite(this.spawnPoint.x, this.spawnPoint.y, 'player');
     this.player.setCollideWorldBounds(true);
     this.player.body.setSize(28, 48, true);
-    this.physics.world.setBounds(0, 0, width, height);
+
+    const worldWidth = width * 2;
+    this.physics.world.setBounds(0, 0, worldWidth, height);
+    this.cameras.main.setBounds(0, 0, worldWidth, height);
+    this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
+
     this.physics.add.collider(this.player, this.groundLayer);
 
     this.createSubjectPowerCourse(width, height);
@@ -126,6 +134,20 @@ export class QuizScene extends Phaser.Scene {
     this.physics.add.collider(this.player, this.assessmentWalls);
     this.physics.add.collider(this.player, this.questionBlocks, this.hitBlock, null, this);
 
+    this.coins = this.physics.add.group({ allowGravity: false });
+    for (let i = 0; i < 5; i++) {
+      this.coins.create(300 + i * 200, height - 200, 'coin');
+    }
+    this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
+
+    this.enemies = this.physics.add.group();
+    const enemy = this.enemies.create(800, height - 80, 'enemy');
+    enemy.setVelocityX(-60);
+    enemy.setBounce(1, 0);
+    enemy.setCollideWorldBounds(true);
+    this.physics.add.collider(this.enemies, this.groundLayer);
+    this.physics.add.overlap(this.player, this.enemies, this.hitEnemy, null, this);
+
     this.cursors = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys('W,A,S,D,SHIFT');
 
@@ -149,7 +171,7 @@ export class QuizScene extends Phaser.Scene {
   }
 
   createLevelTilemap() {
-    const columns = Math.ceil(this.scale.width / TILE_SIZE);
+    const columns = Math.ceil((this.scale.width * 2) / TILE_SIZE);
     const rows = Math.ceil(this.scale.height / TILE_SIZE);
     
     // Default flat ground
@@ -480,10 +502,32 @@ export class QuizScene extends Phaser.Scene {
     this.tweens.killTweensOf(this.flowText);
   }
 
+  collectCoin(player, coin) {
+    coin.disableBody(true, true);
+    this.score += 5;
+    this.scoreText.setText(`⭐ ${this.score}  Galileo ${this.galileoBadges}`);
+    try { this.sound.play('coin_sfx'); } catch(e) {}
+  }
+
+  hitEnemy(player, enemy) {
+    if (player.body.touching.down && enemy.body.touching.up) {
+      enemy.disableBody(true, true);
+      this.player.setVelocityY(-350);
+      try { this.sound.play('stomp_sfx'); } catch(e) {}
+    } else {
+      this.player.setPosition(this.spawnPoint.x, this.spawnPoint.y);
+      this.cameras.main.shake(150, 0.01);
+    }
+  }
+
   update() {
     if (this.isUiActive) {
       this.player.setVelocityX(0);
       return;
+    }
+
+    if (this.bgSky) {
+      this.bgSky.tilePositionX = this.cameras.main.scrollX * 0.3;
     }
 
     const isLeft = this.cursors.left.isDown || this.keys.A.isDown;
@@ -542,6 +586,7 @@ export class QuizScene extends Phaser.Scene {
 
     if (isUp && this.player.body.blocked.down) {
       this.player.setVelocityY(-jumpSpeed);
+      try { this.sound.play('jump_sfx'); } catch(e) {}
     }
   }
 

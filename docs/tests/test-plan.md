@@ -228,77 +228,77 @@ fulfills:
 ### Test Case 1: Player Locomotion Initialization
 - **UNID:** `test:scids-game:mechanics:tc1`
 - **Description:** Verifies basic player locomotion bindings and world collision setup.
-- **Command:** `grep -E "(setVelocity|setCollideWorldBounds|createCursorKeys)" src/scenes/MainScene.js`
+- **Command:** `grep -E "(setVelocity|setCollideWorldBounds|createCursorKeys)" src/scenes/QuizScene.js`
 - **Expected Output:** Match found.
 - **Pass/Fail:** [ ] Pass / [ ] Fail
 
 ### Test Case 2: Physics Gravity Validation
 - **UNID:** `test:scids-game:mechanics:tc2`
 - **Description:** Verifies proper gravity applied to the physics engine to ensure a responsive platformer feel.
-- **Command:** `grep -E "gravity:.*[yY]:" src/main.js src/scenes/MainScene.js`
+- **Command:** `grep -E "gravity:.*[yY]:" src/main.js src/scenes/QuizScene.js`
 - **Expected Output:** Match found.
 - **Pass/Fail:** [ ] Pass / [ ] Fail
 
 ### Test Case 3: Player Jump Mechanics
 - **UNID:** `test:scids-game:mechanics:tc3`
 - **Description:** Verifies jump logic handles touching down and applies upward vertical velocity.
-- **Command:** `grep -E "(body\.touching\.down.*setVelocityY|body\.blocked\.down)" src/scenes/MainScene.js`
+- **Command:** `grep -E "(body\.touching\.down.*setVelocityY|body\.blocked\.down)" src/scenes/QuizScene.js`
 - **Expected Output:** Match found.
 - **Pass/Fail:** [ ] Pass / [ ] Fail
 
 ### Test Case 4: Collectible System (Coins)
 - **UNID:** `test:scids-game:mechanics:tc4`
 - **Description:** Verifies overlap triggers to collect coins and disable their physical bodies.
-- **Command:** `grep -E "(overlap.*coins.*collectCoin|disableBody.*coin)" src/scenes/MainScene.js`
+- **Command:** `grep -E "(overlap.*coins.*collectCoin|disableBody.*coin)" src/scenes/QuizScene.js`
 - **Expected Output:** Match found.
 - **Pass/Fail:** [ ] Pass / [ ] Fail
 
 ### Test Case 5: Score Tracking Accumulator
 - **UNID:** `test:scids-game:mechanics:tc5`
 - **Description:** Verifies that internal score variables correctly increment when rewards/coins are acquired.
-- **Command:** `grep -E "(score\s*\+=|updateScore)" src/scenes/MainScene.js`
+- **Command:** `grep -E "(score\s*\+=|updateScore)" src/scenes/QuizScene.js`
 - **Expected Output:** Match found.
 - **Pass/Fail:** [ ] Pass / [ ] Fail
 
 ### Test Case 6: Dynamic Camera Following
 - **UNID:** `test:scids-game:mechanics:tc6`
 - **Description:** Verifies that the main camera viewport is firmly bound to track the player sprite.
-- **Command:** `grep -E "cameras\.main\.startFollow\(" src/scenes/MainScene.js`
+- **Command:** `grep -E "cameras\.main\.startFollow\(" src/scenes/QuizScene.js`
 - **Expected Output:** Match found.
 - **Pass/Fail:** [ ] Pass / [ ] Fail
 
 ### Test Case 7: Parallax Environment Backgrounds
 - **UNID:** `test:scids-game:mechanics:tc7`
 - **Description:** Verifies scrolling backgrounds using tileSprite based on camera or player movement.
-- **Command:** `grep -E "(tilePositionX.*=|add\.tileSprite)" src/scenes/MainScene.js`
+- **Command:** `grep -E "(tilePositionX.*=|add\.tileSprite)" src/scenes/QuizScene.js`
 - **Expected Output:** Match found.
 - **Pass/Fail:** [ ] Pass / [ ] Fail
 
 ### Test Case 8: Level Bounds Enforcement
 - **UNID:** `test:scids-game:mechanics:tc8`
 - **Description:** Verifies that the camera specifically constrains its view bounds within the level map.
-- **Command:** `grep -E "cameras\.main\.setBounds\(" src/scenes/MainScene.js`
+- **Command:** `grep -E "cameras\.main\.setBounds\(" src/scenes/QuizScene.js`
 - **Expected Output:** Match found.
 - **Pass/Fail:** [ ] Pass / [ ] Fail
 
 ### Test Case 9: Immersive Audio Feedback
 - **UNID:** `test:scids-game:mechanics:tc9`
 - **Description:** Verifies playing of sound effects for dynamic actions like jumps and coin collection.
-- **Command:** `grep -E "sound\.play\(" src/scenes/MainScene.js`
+- **Command:** `grep -E "sound\.play\(" src/scenes/QuizScene.js`
 - **Expected Output:** Match found.
 - **Pass/Fail:** [ ] Pass / [ ] Fail
 
 ### Test Case 10: Enemy Patrol Logic
 - **UNID:** `test:scids-game:mechanics:tc10`
 - **Description:** Verifies rudimentary patrol loop or bounce mechanics for environmental hazards/enemies.
-- **Command:** `grep -E "(setBounce|setVelocityX.*\-?[0-9]+)" src/scenes/MainScene.js`
+- **Command:** `grep -E "(setBounce|setVelocityX.*\-?[0-9]+)" src/scenes/QuizScene.js`
 - **Expected Output:** Match found.
 - **Pass/Fail:** [ ] Pass / [ ] Fail
 
 ### Test Case 11: Seamless Scene Transitions
 - **UNID:** `test:scids-game:mechanics:tc11`
 - **Description:** Verifies safe navigation between levels and the seamless loading into the Result scene.
-- **Command:** `grep -E "scene\.start\(" src/scenes/MainScene.js`
+- **Command:** `grep -E "scene\.start\(" src/scenes/QuizScene.js`
 - **Expected Output:** Match found.
 - **Pass/Fail:** [ ] Pass / [ ] Fail
 
