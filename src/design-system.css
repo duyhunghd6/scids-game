@@ -1,0 +1,179 @@
+/* ==========================================================================
+   SciDS Game: HTML5 Design System
+   ========================================================================== */
+
+:root {
+  /* Dimensions & Grid Variables */
+  --grid-base: 16px;
+  --grid-double: 32px;
+  
+  --spacing-xs: calc(var(--grid-base) * 0.25);
+  --spacing-sm: calc(var(--grid-base) * 0.5);
+  --spacing-md: var(--grid-base);
+  --spacing-lg: var(--grid-double);
+  --spacing-xl: calc(var(--grid-double) * 1.5);
+
+  /* Color Palette (SNES-era vibrance) */
+  --color-primary: #106ad2;
+  --color-primary-light: #468be1;
+  --color-primary-dark: #004ba0;
+  
+  --color-secondary: #ff9100;
+  --color-secondary-light: #ffba4d;
+  --color-secondary-dark: #c56200;
+
+  --color-success: #38b764;
+  --color-warning: #eebb00;
+  --color-danger: #d21f3c;
+
+  --color-background-dark: #191428;
+  --color-background-panel: #2b2b45;
+  --color-background-light: #e6e6e6;
+
+  --color-text-light: #ffffff;
+  --color-text-dark: #1a1a1a;
+  
+  --color-border: #ffffff;
+  --color-shadow: rgba(0, 0, 0, 0.5);
+
+  /* Typography Rules */
+  --font-family-game: 'Press Start 2P', monospace, sans-serif;
+  --font-size-sm: 12px;
+  --font-size-md: 16px;
+  --font-size-lg: 24px;
+  --font-size-xl: 32px;
+  
+  /* Line Weights & Shape Language */
+  --border-width-sm: 2px;
+  --border-width-md: 4px;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+}
+
+/* Global Reset & Box Sizing for Game Overlays */
+.scids-ui {
+  box-sizing: border-box;
+  font-family: var(--font-family-game);
+  color: var(--color-text-light);
+  line-height: 1.5;
+  image-rendering: auto; /* Base rendering */
+}
+
+.scids-ui * {
+  box-sizing: border-box;
+}
+
+/* Pixel Art Rendering Rule */
+.pixelated {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+/* ==========================================================================
+   UI Blueprints Component Library
+   ========================================================================== */
+
+/* 1. Typography Extensions */
+.scids-text-title {
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  text-shadow: 2px 2px 0 var(--color-shadow);
+  margin-bottom: var(--spacing-md);
+  text-transform: uppercase;
+}
+
+.scids-text-body {
+  font-size: var(--font-size-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* 2. Panels & Dialogs (9-slice style emulation via borders) */
+.scids-panel {
+  background-color: var(--color-background-panel);
+  border: var(--border-width-md) solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: 4px 4px 0 var(--color-shadow);
+  position: relative;
+  /* Crisp corner aesthetic */
+  border-image-slice: 4 fill;
+}
+
+.scids-panel-header {
+  background-color: var(--color-primary-dark);
+  color: var(--color-text-light);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: var(--border-width-sm) solid var(--color-border);
+  border-top-left-radius: calc(var(--border-radius-md) - var(--border-width-md));
+  border-top-right-radius: calc(var(--border-radius-md) - var(--border-width-md));
+  margin: calc(var(--spacing-lg) * -1);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  font-size: var(--font-size-lg);
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 var(--color-shadow);
+}
+
+/* 3. Buttons */
+.scids-btn {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  font-family: var(--font-family-game);
+  font-size: var(--font-size-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: var(--border-width-sm) solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  text-transform: uppercase;
+  text-align: center;
+  user-select: none;
+  transition: transform 0.1s ease, filter 0.1s ease;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,0.2), 
+              2px 2px 0 var(--color-shadow);
+}
+
+.scids-btn:hover {
+  background-color: var(--color-primary-light);
+  filter: brightness(1.1);
+}
+
+.scids-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: inset 2px 2px 0 rgba(0,0,0,0.2), 
+              0px 0px 0 var(--color-shadow);
+}
+
+.scids-btn--secondary {
+  background-color: var(--color-secondary);
+}
+
+.scids-btn--secondary:hover {
+  background-color: var(--color-secondary-light);
+}
+
+.scids-btn--success {
+  background-color: var(--color-success);
+}
+
+.scids-btn--danger {
+  background-color: var(--color-danger);
+}
+
+/* 4. Form/Input Elements */
+.scids-input {
+  background-color: var(--color-background-dark);
+  color: var(--color-text-light);
+  border: var(--border-width-sm) solid var(--color-border);
+  padding: var(--spacing-sm);
+  font-family: var(--font-family-game);
+  font-size: var(--font-size-md);
+  width: 100%;
+  outline: none;
+}
+
+.scids-input:focus {
+  border-color: var(--color-secondary);
+}

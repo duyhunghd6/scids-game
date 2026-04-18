@@ -218,14 +218,16 @@ fulfills: []
 ### 7.1. Current Asset Inventory
 The baseline arcade platforming engine is **100% covered**. We possess all the physics, locomotion, and world-building sprites necessary within `./public/assets/mario/` (e.g., `mario_bros.png`, `tile_set.png`, `item_objects.png`, `enemies.png`).
 
+Furthermore, all required domain-specific visual assets have been uniquely generated and placed into their respective directories:
+- **Educational Diagrams (`./public/assets/educational/`):** `volcano_cross_section.png`, `human_skeletal_chart.png`, `electrical_circuit.png`
+- **Hub World Items (`./public/assets/hub/`):** `telescope.png`, `bunsen_burner.png`, `reward_medal.png`
+
 <!-- unid-meta
 unid: arch:game-design:missing-assets
 fulfills: []
 -->
 ### 7.2. Missing Assets (Gap Analysis)
-Based on our "Curriculum Disguised as Adventure" requirements, some domain-specific visual assets do not currently exist:
-- **Core Educational Diagrams:** Volcano Cross-Section, Human Skeletal Chart, Electrical Circuit Components.
-- **Hub World Items:** Science Lab Decorations (Telescope, Bunsen Burner), Reward Medals.
+All previously identified missing core educational diagrams and science laboratory decorations have been successfully generated and populated. As of the current sprint, there are no missing visual asset gaps for the core MVP release.
 
 <!-- unid-meta
 unid: arch:game-design:flexible-strategy
@@ -233,3 +235,31 @@ fulfills: []
 -->
 ### 7.3. Flexible Asset Strategy
 If the above specific image assets do not exist, we strictly fall back to procedural drawing using Phaser 4's built-in `Phaser.Graphics` for UI panels, hitboxes, vector lines, and particle emitters.
+
+<!-- unid-meta
+unid: arch:game-design:art-design-system
+fulfills: []
+-->
+### 7.4. Future Task: Formalize Game Art Design System
+To ensure long-term visual consistency across new domains and UI overlays, future sprints must include a task to establish and document a comprehensive **Design System for Game Art**. This system should define:
+- **Color Palettes:** Standardized hex codes and shading ramps (e.g., SNES-era vibrance).
+- **Style Guidelines:** Pixel art line weights, lighting direction, and shape language.
+- **Dimensional Standards:** Grid layouts (e.g., `32x32` or `16x16` base units) to prevent scaling artifacting.
+- **UI Blueprints:** A generic component library (panels, standard buttons, and text dialogs) mapping back to CSS tokens and Phaser graphic parameters, utilizing 9-slice scaling for responsive dialogue boxes.
+
+<!-- unid-meta
+unid: arch:game-design:animation-pipelines
+fulfills: []
+-->
+### 7.5. Sprite Animation Pipelines
+For characters, enemies, and dynamic obstacles, a standardized animation pipeline must be codified. The preferred workflow involves animating within standard tools (e.g., Aseprite) and exporting as Texture Atlases (JSON Hash or Array format). This significantly reduces VRAM usage and optimizes draw calls in Phaser 4. Every interactive entity should adhere to a unified state-machine convention for its animations (e.g., `idle`, `walk`, `jump`, `fall`, `hurt`, `victory`).
+
+<!-- unid-meta
+unid: arch:game-design:memory-management
+fulfills: []
+-->
+### 7.6. Texture Memory and Performance Budgeting
+To maintain stable 60 FPS performance bounds—particularly on the mid-range tablets that are common in educational environments—the total texture footprint per Domain Level must be strictly capped.
+- **Background Optimization:** Favor layered Tiled `.json` maps with repeatable tiles, Parallax scrolling layers, and procedural gradients instead of monolithic full-screen images.
+- **Texture Packing:** All scattered interactive objects (coins, question blocks, UI icons, power-ups) must be bundled into unified spritesheets (texture atlases) to reduce network latency during loading and GPU switching.
+- **Post-Processing Discipline:** Phaser 4 filter pipelines, shaders, and post-processing (e.g., Bloom, Blur) should be utilized sparingly, isolating their use to critical 'reward feedback' moments or high-stakes 'boss interactions'.

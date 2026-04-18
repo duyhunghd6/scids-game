@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SciDS Game Art - Design System Showcase</title>
+
+  <!-- Load Retro Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  
+  <!-- Load Game Design System Styles -->
+  <link rel="stylesheet" href="/src/design-system.css">
+
+  <style>
+    body {
+      background-color: var(--color-background-dark);
+      padding: var(--spacing-xl);
+    }
+    
+    .ds-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .ds-section {
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .color-swatch-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-md);
+    }
+
+    .color-swatch {
+      width: 80px;
+      height: 80px;
+      border: var(--border-width-sm) solid var(--color-border);
+      border-radius: var(--border-radius-sm);
+      display: flex;
+      align-items: flex-end;
+      padding: var(--spacing-xs);
+      font-size: 10px;
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.8);
+    }
+
+    .demo-buttons-container {
+      display: flex;
+      gap: var(--spacing-md);
+      align-items: center;
+      margin-bottom: var(--spacing-md);
+    }
+  </style>
+</head>
+<body class="scids-ui">
+
+  <div class="ds-container">
+    <div class="scids-text-title" style="text-align: center; margin-bottom: 40px; color: var(--color-secondary);">
+      SciDS Design System
+    </div>
+
+    <!-- Typography -->
+    <div class="ds-section scids-panel">
+      <div class="scids-panel-header">Typography</div>
+      <div class="scids-text-title">Header (XL)</div>
+      <div class="scids-text-body" style="font-size: var(--font-size-lg);">Subtitle (LG) - The quick brown fox</div>
+      <div class="scids-text-body">Body (MD) - Jumps over the lazy dog. Used for dialog boxes.</div>
+      <div class="scids-text-body" style="font-size: var(--font-size-sm); color: var(--color-secondary-light);">Small text (SM) - Used for metadata or tiny prompts.</div>
+    </div>
+
+    <!-- Colors -->
+    <div class="ds-section scids-panel">
+      <div class="scids-panel-header">SNES Palette</div>
+      
+      <div class="scids-text-body">Primary & Secondary</div>
+      <div class="color-swatch-container" style="margin-bottom: var(--spacing-md);">
+        <div class="color-swatch" style="background: var(--color-primary);">Primary</div>
+        <div class="color-swatch" style="background: var(--color-primary-light);">Pri Light</div>
+        <div class="color-swatch" style="background: var(--color-primary-dark);">Pri Dark</div>
+        <div class="color-swatch" style="background: var(--color-secondary);">Second</div>
+        <div class="color-swatch" style="background: var(--color-secondary-light);">Sec Light</div>
+        <div class="color-swatch" style="background: var(--color-secondary-dark);">Sec Dark</div>
+      </div>
+
+      <div class="scids-text-body">Semantic & Backgrounds</div>
+      <div class="color-swatch-container">
+        <div class="color-swatch" style="background: var(--color-success);">Success</div>
+        <div class="color-swatch" style="background: var(--color-warning);">Warning</div>
+        <div class="color-swatch" style="background: var(--color-danger);">Danger</div>
+        <div class="color-swatch" style="background: var(--color-background-dark);">Bg Dark</div>
+        <div class="color-swatch" style="background: var(--color-background-panel);">Bg Panel</div>
+        <div class="color-swatch" style="background: var(--color-background-light); color: var(--color-text-dark);">Bg Light</div>
+      </div>
+    </div>
+
+    <!-- UI Components -->
+    <div class="ds-section scids-panel">
+      <div class="scids-panel-header">UI Blueprints</div>
+      
+      <div class="scids-text-body">Buttons</div>
+      <div class="demo-buttons-container">
+        <button class="scids-btn">Primary Action</button>
+        <button class="scids-btn scids-btn--secondary">Secondary</button>
+      </div>
+      <div class="demo-buttons-container">
+        <button class="scids-btn scids-btn--success">Confirm</button>
+        <button class="scids-btn scids-btn--danger">Cancel</button>
+      </div>
+
+      <div class="scids-text-body" style="margin-top: var(--spacing-lg);">Input Field</div>
+      <div style="max-width: 300px;">
+        <input type="text" class="scids-input" placeholder="Enter Science Fact..." />
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
