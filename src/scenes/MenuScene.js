@@ -53,20 +53,21 @@ export class MenuScene extends Phaser.Scene {
     this.createDecorationShop(width, height);
 
     this.player = this.physics.add.sprite(100, height - 100, 'player');
+    this.player.setScale(3);
     this.player.setCollideWorldBounds(true);
-    this.physics.world.setBounds(0, 0, width, height);
+    const worldWidth = width * 3;
+    this.physics.world.setBounds(0, 0, worldWidth, height);
+    this.cameras.main.setBounds(0, 0, worldWidth, height);
+    this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
     this.physics.add.collider(this.player, this.groundLayer);
 
     this.topicBlocks = this.physics.add.staticGroup();
-    const columns = Math.ceil(TOPICS.length / 2);
-    const startX = 160;
-    const spacingX = (width - 320) / Math.max(1, columns - 1);
+    const startX = width;
+    const spacingX = 160;
 
     TOPICS.forEach((topic, i) => {
-      const col = i % columns;
-      const row = Math.floor(i / columns);
-      const bx = startX + (col * spacingX);
-      const by = height - 280 + (row * 120);
+      const bx = startX + (i * spacingX);
+      const by = height - 160 - (i % 2 === 0 ? 0 : 70);
       const block = this.topicBlocks.create(bx, by, 'qblock');
       block.setData('topicIndex', i);
 
@@ -86,7 +87,7 @@ export class MenuScene extends Phaser.Scene {
   }
 
   createLevelTilemap() {
-    const columns = Math.ceil(this.scale.width / TILE_SIZE);
+    const columns = Math.ceil((this.scale.width * 3) / TILE_SIZE);
     const rows = Math.ceil(this.scale.height / TILE_SIZE);
     const data = Array.from({ length: rows }, (_, row) => (
       Array.from({ length: columns }, () => (row === rows - 1 ? 0 : -1))

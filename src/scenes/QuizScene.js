@@ -88,8 +88,8 @@ export class QuizScene extends Phaser.Scene {
     const spawnX = this.returnFromSecret ? 90 : 50;
     this.spawnPoint = new Phaser.Math.Vector2(spawnX, height - 100);
     this.player = this.physics.add.sprite(this.spawnPoint.x, this.spawnPoint.y, 'player');
+    this.player.setScale(3);
     this.player.setCollideWorldBounds(true);
-    this.player.body.setSize(28, 48, true);
 
     const worldWidth = width * 2;
     this.physics.world.setBounds(0, 0, worldWidth, height);
