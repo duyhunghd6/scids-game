@@ -58,12 +58,15 @@ export class MenuScene extends Phaser.Scene {
     this.physics.add.collider(this.player, this.groundLayer);
 
     this.topicBlocks = this.physics.add.staticGroup();
-    const startX = 200;
-    const spacing = (width - 300) / Math.max(1, TOPICS.length - 1);
+    const columns = Math.ceil(TOPICS.length / 2);
+    const startX = 160;
+    const spacingX = (width - 320) / Math.max(1, columns - 1);
 
     TOPICS.forEach((topic, i) => {
-      const bx = startX + (i * spacing);
-      const by = height - 180;
+      const col = i % columns;
+      const row = Math.floor(i / columns);
+      const bx = startX + (col * spacingX);
+      const by = height - 280 + (row * 120);
       const block = this.topicBlocks.create(bx, by, 'qblock');
       block.setData('topicIndex', i);
 
@@ -86,7 +89,7 @@ export class MenuScene extends Phaser.Scene {
     const columns = Math.ceil(this.scale.width / TILE_SIZE);
     const rows = Math.ceil(this.scale.height / TILE_SIZE);
     const data = Array.from({ length: rows }, (_, row) => (
-      Array.from({ length: columns }, () => (row === rows - 1 ? 1 : -1))
+      Array.from({ length: columns }, () => (row === rows - 1 ? 0 : -1))
     ));
 
     const map = this.make.tilemap({
@@ -163,7 +166,7 @@ export class MenuScene extends Phaser.Scene {
   }
 
   createDecorationShop(width, height) {
-    this.shopMessage = this.add.text(width / 2, 402, 'Spend coins on lab upgrades. Purchased items stay in your hub.', {
+    this.shopMessage = this.add.text(width / 2, 175, 'Spend coins on lab upgrades. Purchased items stay in your hub.', {
       fontFamily: 'Arial, sans-serif',
       fontSize: '14px',
       color: '#e8f6ff',
@@ -171,7 +174,7 @@ export class MenuScene extends Phaser.Scene {
 
     HUB_DECORATIONS.forEach((item, index) => {
       const x = 160 + (index * 240);
-      const y = 470;
+      const y = 250;
       this.createShopCard(x, y, item);
     });
   }

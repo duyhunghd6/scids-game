@@ -6,9 +6,10 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('science-volcano-cross-section', 'assets/diagrams/volcano_cross_section.png');
-    this.load.image('science-human-skeleton', 'assets/diagrams/human_skeleton.png');
-    this.load.image('science-circuit-components', 'assets/diagrams/electrical_circuit.png');
+    this.load.image('science-volcano-cross-section', 'assets/science/volcano-cross-section.png');
+    this.load.image('science-human-skeleton', 'assets/science/human-skeleton.png');
+    this.load.image('science-circuit-components', 'assets/science/circuit-components.png');
+    this.load.spritesheet('player', 'assets/mario/mario_bros.png', { frameWidth: 16, frameHeight: 16 });
   }
 
   create() {
@@ -23,12 +24,6 @@ export class PreloadScene extends Phaser.Scene {
       fontSize: '18px',
       color: '#ffffff',
     }).setOrigin(0.5);
-
-    const playerGraphics = this.add.graphics();
-    playerGraphics.fillStyle(0xe94560);
-    playerGraphics.fillRect(0, 0, 32, 48);
-    playerGraphics.generateTexture('player', 32, 48);
-    playerGraphics.destroy();
 
     const groundGraphics = this.add.graphics();
     groundGraphics.fillStyle(0x8B4513);
