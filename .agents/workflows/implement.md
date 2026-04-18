@@ -81,6 +81,6 @@ After all 10 beads have been processed:
 ## Phase 4: Land the Plane & Write Sprint Report
 
 1. **Sync Database:** Run `bd sync`
-2. **Commit & Push:** `git add . && git commit -m "chore: land sprint batch" && git pull --rebase && git push`
+2. **Commit & Push:** Generate a commit message that includes all resolved beads-ids and their associated UNIDs. Example: `git add . && git commit -m "chore: land sprint batch [bd-1234, bd-5678] [UNID-A, UNID-B]" && git push`
 3. **Sprint Report:** Write `docs/plan/sprint-N.md` report as the sprint report file (incrementing N based on existing files). Mention all related beads items that have been done, and provide a status report in a sprint report format. Include build verification status and the output paste of the final `bv --robot-triage` quick reference.
 4. **Final Triage Handoff:** Notify the user that the sprint batch is successfully merged and ready for the next shift.

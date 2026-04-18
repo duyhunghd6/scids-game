@@ -263,3 +263,53 @@ To maintain stable 60 FPS performance bounds—particularly on the mid-range tab
 - **Background Optimization:** Favor layered Tiled `.json` maps with repeatable tiles, Parallax scrolling layers, and procedural gradients instead of monolithic full-screen images.
 - **Texture Packing:** All scattered interactive objects (coins, question blocks, UI icons, power-ups) must be bundled into unified spritesheets (texture atlases) to reduce network latency during loading and GPU switching.
 - **Post-Processing Discipline:** Phaser 4 filter pipelines, shaders, and post-processing (e.g., Bloom, Blur) should be utilized sparingly, isolating their use to critical 'reward feedback' moments or high-stakes 'boss interactions'.
+
+---
+
+<!-- unid-meta
+unid: arch:game-design:system-board
+fulfills: []
+-->
+## 8. Game Art Design System
+
+To construct a cohesive universe for SciDS, the structural foundations of all visual assets are standardized below.
+
+<!-- unid-meta
+unid: arch:game-design:characters-board
+fulfills: []
+-->
+### 8.1. Characters Board
+The Characters Board standardizes all entity designs across the game.
+- **Protagonist Avatar:** The primary player character. Should be designed in a `32x32` pixel-art grid, utilizing a vibrant color palette to stand out against complex backgrounds. Requires standard state machine sprites (`idle`, `walk`, `jump`, `fall`, `hurt`, `victory`).
+- **Enemies:** Common threats specific to their environments (e.g., Magma Slimes for Earth Science, Rusted Bots for Physical Science). Standardized to `16x16` or `32x32` boxes with predictable patrol animations.
+- **NPC Guides:** Non-playable characters functioning as "teachers" in the Hub World or safe zones. They should follow a distinct style-weight (thicker outlines) to differentiate them from hostile entities.
+- **Knowledge Bosses:** Large scale, screen-dominating sprites used at the end of Domains (e.g., The "Darkness Monster"). These will consist of multi-part textured animations (e.g., spine animations) rather than single large spritesheets.
+
+<!-- unid-meta
+unid: arch:game-design:game-items
+fulfills: []
+-->
+### 8.2. Game Items & Collectibles
+Clear semantic mapping is crucial for interactive elements so players instinctively understand their function.
+- **Currencies & Standard Pickups (Coins):** Highly animated (using a minimum of 4-6 frames for spinning), brightly glowing gold or silver to drive continuous micro-rewards.
+- **Assessment Triggers (Question Blocks):** Should be universally identifiable across all biomes, utilizing a pulsing emission or distinct question mark iconography.
+- **Domain Power-Ups:** Modeled after classic platformer items.
+  - *Magma Suit / Fire Flower equivalents:* Distinct glowing or fiery visual effects attached to the item model.
+  - *Photon Dash pickups:* Energetic, sharp, and fast-spinning items mapped to the Light & Vision theme.
+- **UI and Educational Blueprints:** Panels and dialog boxes should employ transparent 9-slice glassmorphism or retro-RPG dialogue box aesthetics, keeping UI minimal to maximize viewport space.
+
+<!-- unid-meta
+unid: arch:game-design:maps-environments
+fulfills: []
+-->
+### 8.3. Maps & Environments
+The world is constructed via Tilemaps, adhering strictly to a structured layer hierarchy:
+- **Tilesets:** Base grid sizes of `16x16`. Each domain requires a cohesive tileset:
+  - *Earth & Space:* Subterranean rock, volcanic soil, dark cosmic backgrounds.
+  - *Life Sciences:* Lush foliage textures, vines, organic dirt textures.
+  - *Physical Sciences:* Metallic surfaces, neon energy conduits, laboratory tiles.
+- **Layering Standard:**
+  1. *Background (Parallax):* 2-3 scrolling layers representing depth.
+  2. *Midground/Action (Collision):* The actual platforming layer with solid hitboxes. Consists of primary tiles.
+  3. *Foreground (Decorations):* Non-colliding atmospheric elements overlapping the camera (e.g., vines dangling, fog layers, foreground pillars).
+- **Hub World (The Lab):** A specialized environment composed of dynamic, user-purchased elements functioning structurally like a map canvas. Its grid logic provides sockets for unlocked decorations rather than typical platformer obstacles.
