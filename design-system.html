@@ -113,6 +113,52 @@
       </div>
     </div>
 
+    <!-- 8.1 Characters Board -->
+    <div class="ds-section scids-panel">
+      <div class="scids-panel-header">8.1 Characters Board</div>
+      
+      <div class="scids-text-body">Protagonist Avatar (32x32 bounding boxes)</div>
+      <div class="art-grid-container">
+        <div class="art-box-32" style="background-color: var(--color-primary);"><span class="art-state-badge">idle</span></div>
+        <div class="art-box-32" style="background-color: var(--color-primary);"><span class="art-state-badge">walk</span></div>
+        <div class="art-box-32" style="background-color: var(--color-primary-light);"><span class="art-state-badge">jump</span></div>
+        <div class="art-box-32" style="background-color: var(--color-primary-dark);"><span class="art-state-badge">fall</span></div>
+        <div class="art-box-32" style="background-color: var(--color-danger);"><span class="art-state-badge">hurt</span></div>
+        <div class="art-box-32" style="background-color: var(--color-success);"><span class="art-state-badge">victory</span></div>
+      </div>
+
+      <div class="scids-text-body">Enemies & NPC Guides (16x16 / 32x32 logic)</div>
+      <div class="art-grid-container">
+        <div class="art-box-16" style="background-color: var(--color-warning);">Enemy</div>
+        <div class="art-box-16" style="background-color: var(--color-warning);">Enemy</div>
+        <div class="art-box-32" style="background-color: var(--color-secondary); border-width: 3px;">NPC Guide</div>
+      </div>
+    </div>
+
+    <!-- 8.2 Game Items & Collectibles -->
+    <div class="ds-section scids-panel">
+      <div class="scids-panel-header">8.2 Game Items & Collectibles</div>
+      <div class="scids-text-body">Items scale to 16x16 standard grid spaces</div>
+      <div class="art-grid-container">
+        <div class="art-box-16" style="border-radius: 50%; background-color: var(--color-warning);">Coin</div>
+        <div class="art-box-16" style="background-color: var(--color-primary-dark); border-color: var(--color-secondary);">[ ? ]</div>
+        <div class="art-box-16" style="background-color: var(--color-danger);">Suit</div>
+        <div class="art-box-16" style="background-color: var(--color-text-light); color: var(--color-text-dark);">Dash</div>
+      </div>
+    </div>
+
+    <!-- 8.3 Maps & Environments -->
+    <div class="ds-section scids-panel">
+      <div class="scids-panel-header">8.3 Maps & Environments</div>
+      <div class="scids-text-body">Layer Hierarchy Matrix (Tileset standard: 16x16)</div>
+      <div class="art-grid-container" style="gap: 2px;">
+        <div class="art-box-32 art-layer-bg">BG Parallax</div>
+        <div class="art-box-32 art-layer-mg">MG Action/Collision</div>
+        <div class="art-box-32 art-layer-fg">FG Decor</div>
+      </div>
+      <div class="scids-text-body" style="font-size: var(--font-size-sm); color: var(--color-secondary-light);">* Hub World maps omit action collision boundaries structurally.</div>
+    </div>
+
   </div>
 
 </body>

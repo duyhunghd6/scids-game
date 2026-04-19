@@ -177,3 +177,76 @@
 .scids-input:focus {
   border-color: var(--color-secondary);
 }
+
+/* ==========================================================================
+   Game Art Design System
+   ========================================================================== */
+
+/* Structural Grid Displays */
+.art-grid-container {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+/* Base Dimensions - Mocked up scaled x2 for preview clarity */
+.art-box-32 {
+  width: 64px;
+  height: 64px;
+  border: 1px dashed var(--color-danger);
+  background-color: rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  text-align: center;
+  position: relative;
+}
+
+.art-box-16 {
+  width: 32px;
+  height: 32px;
+  border: 1px dashed var(--color-warning);
+  background-color: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  text-align: center;
+  position: relative;
+}
+
+/* State machine overlays */
+.art-state-badge {
+  position: absolute;
+  top: -10px;
+  background: var(--color-text-dark);
+  color: var(--color-text-light);
+  padding: 2px 4px;
+  border-radius: 2px;
+  font-size: 6px;
+  white-space: nowrap;
+}
+
+/* Layering Representation */
+.art-layer-bg {
+  border-color: var(--color-primary-dark);
+  border-style: solid;
+  opacity: 0.3;
+}
+
+.art-layer-mg {
+  border-color: var(--color-primary-light);
+  border-style: solid;
+  opacity: 1;
+}
+
+.art-layer-fg {
+  border-color: var(--color-success);
+  border-style: dotted;
+  opacity: 0.8;
+}
+
