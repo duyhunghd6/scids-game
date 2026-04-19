@@ -29,7 +29,11 @@ Lists all UNIDs present in `Backlog.md` and what PRD or Architectural components
 | `epic:scids:educational-architecture` | `arch:scids:core-stack`,<br>`arch:game-design:vision`,<br>`arch:game-design:pedagogy` | 🟢 Mapped | Foundational systems |
 | `story:scids:data-ingestion` | `epic:scids:educational-architecture`,<br>`arch:scids:data-sublayer` | 🟢 Mapped | |
 | `story:scids:engine-boot` | `epic:scids:educational-architecture`,<br>`arch:scids:rendering` | 🟢 Mapped | |
-| `story:scids:assessment-feedback-loop` | `epic:scids:educational-architecture`,<br>`arch:game-design:assessment-loop`,<br>`arch:game-design:feedback-systems`,<br>`arch:game-design:corrective-feedback`,<br>`arch:game-design:level-completion`,<br>`arch:scids:scene-pipeline` | 🟢 Mapped | | |
+| `story:scids:assessment-feedback-loop` | `epic:scids:educational-architecture`,<br>`arch:game-design:assessment-loop`,<br>`arch:game-design:feedback-systems`,<br>`arch:game-design:corrective-feedback`,<br>`arch:game-design:level-completion`,<br>`arch:scids:scene-pipeline` | 🟢 Mapped | |
+| `epic:scids:game-art-design-system`| `arch:game-design:system-board` | 🟢 Mapped | Core epic for Game Art Design System |
+| `story:scids:characters-board` | `epic:scids:game-art-design-system`,<br>`arch:game-design:characters-board` | 🟢 Mapped | |
+| `story:scids:game-items` | `epic:scids:game-art-design-system`,<br>`arch:game-design:game-items` | 🟢 Mapped | |
+| `story:scids:maps-environments` | `epic:scids:game-art-design-system`,<br>`arch:game-design:maps-environments` | 🟢 Mapped | |
 
 ## 2. Architecture & Design Alignment Gap Analysis
 This section analyzes `Architecture.md` and `game-design.md` for proper tracking against the Backlog. Architectural items not in the backlog or PRD are highlighted.
@@ -62,6 +66,10 @@ This section analyzes `Architecture.md` and `game-design.md` for proper tracking
 | `arch:game-design:gamification-proposals`| `epic:scids:advanced-gamification` | 🟢 Mapped |
 | *(All Advanced Gamification features)* | *(All Gamification Stories)* | 🟢 Mapped |
 | *(All Asset features)* | *(All Asset Stories)* | 🟢 Mapped |
+| `arch:game-design:system-board` | `epic:scids:game-art-design-system` | 🟢 Mapped |
+| `arch:game-design:characters-board` | `story:scids:characters-board` | 🟢 Mapped |
+| `arch:game-design:game-items` | `story:scids:game-items` | 🟢 Mapped |
+| `arch:game-design:maps-environments` | `story:scids:maps-environments` | 🟢 Mapped |
 
 ## 3. Executive Review & Action Items
 

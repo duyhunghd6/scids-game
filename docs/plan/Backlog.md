@@ -267,3 +267,43 @@ fulfills:
 -->
 **Description:** Finalize the full sequence covering the presentation of a question, correctness evaluation, game state updates, negative/positive corrective feedback screens, and final level-completion scoring.
 
+---
+
+## Epic: Game Art Design System
+<!-- unid-meta
+unid: epic:scids:game-art-design-system
+beads_id: scids-game-3vu
+fulfills:
+  - arch:game-design:system-board
+-->
+**Description:** Formalize the Game Art Design System for SciDS, constructing a cohesive universe with standardized characters, items, and maps.
+
+### Story: Standardize Characters Board
+<!-- unid-meta
+unid: story:scids:characters-board
+beads_id: scids-game-3vu.1
+fulfills:
+  - epic:scids:game-art-design-system
+  - arch:game-design:characters-board
+-->
+**Description:** Codify the characters board focusing on standardizing the Protagonist Avatar, Enemies, NPC Guides, and Knowledge Bosses.
+
+### Story: Standardize Game Items & Collectibles
+<!-- unid-meta
+unid: story:scids:game-items
+beads_id: scids-game-3vu.2
+fulfills:
+  - epic:scids:game-art-design-system
+  - arch:game-design:game-items
+-->
+**Description:** Outline the structural design values for game items, assessment triggers, domain power-ups, and UI components.
+
+### Story: Standardize Maps & Environments
+<!-- unid-meta
+unid: story:scids:maps-environments
+beads_id: scids-game-3vu.3
+fulfills:
+  - epic:scids:game-art-design-system
+  - arch:game-design:maps-environments
+-->
+**Description:** Establish grid structure, layering standards and logical configuration mapping rules for all domains including Earth & Space, Life Science, Physical Science and the Hub World.
