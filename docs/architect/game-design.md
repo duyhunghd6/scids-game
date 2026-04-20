@@ -313,3 +313,15 @@ The world is constructed via Tilemaps, adhering strictly to a structured layer h
   2. *Midground/Action (Collision):* The actual platforming layer with solid hitboxes. Consists of primary tiles.
   3. *Foreground (Decorations):* Non-colliding atmospheric elements overlapping the camera (e.g., vines dangling, fog layers, foreground pillars).
 - **Hub World (The Lab):** A specialized environment composed of dynamic, user-purchased elements functioning structurally like a map canvas. Its grid logic provides sockets for unlocked decorations rather than typical platformer obstacles.
+
+<!-- unid-meta
+unid: arch:game-design:sprite-slicing
+fulfills: []
+-->
+### 8.4. Technical Implementation: CSS Sprite Slicing
+To preview and map game sprites within the static HTML5 Design System with pixel-perfect crispness (without Phaser 4 canvas interpolation), the HTML/CSS employs mathematical scaling on the core sprite sheets.
+- **Rendering:** All sprite bounding boxes (`.art-box-32`, `.art-box-16`) apply `image-rendering: pixelated;` to preserve raw pixel edges in the browser.
+- **Precision Zoom Framing:** Because sprite sheets (e.g., `mario_bros.png` at 384x528) contain characters built to a 16x16 native scale, the design system employs an exact mathematical multiplier to crop specific frames into larger UI boxes.
+  - *Example:* For a 16x16 frame mapping to an `art-box-32` container (a 64x64px view), a **4x Scaling Ratio** is applied globally to both the `background-size` and `background-position` properties.
+  - A Mario `idle` pose located at native coordinates (80px, 32px) on the sprite sheet grid is rendered cleanly via `background-size: 1536px 2112px;` and translated via `background-position: -320px -128px;`.
+- **Items & Enemies Integration:** Enemy and item boards utilize similar 2x scaling methods when rendering native 16x16 assets inside `art-box-16` (32x32px view) standard slots.

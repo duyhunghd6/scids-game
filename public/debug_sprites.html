@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .grid { display: flex; flex-wrap: wrap; gap: 2px; }
+        .cell {
+            width: 32px; height: 32px;
+            border: 1px solid red;
+            background-repeat: no-repeat;
+            image-rendering: pixelated;
+        }
+        .bg-enemies { background-image: url('/assets/mario/enemies.png'); background-size: 1616px 256px; }
+        .bg-smb { background-image: url('/assets/mario/smb_enemies_sheet.png'); background-size: 872px 522px; }
+        .bg-items { background-image: url('/assets/mario/item_objects.png'); background-size: 1152px 672px; }
+    </style>
+</head>
+<body>
+    <h3>Enemies (0 to -160, 0 to -64)</h3>
+    <div class="grid" id="g-enemies"></div>
+    <h3>SMB Enemies (0 to -160, 0 to -64)</h3>
+    <div class="grid" id="g-smb"></div>
+    <h3>Items (0 to -160, 0 to -64)</h3>
+    <div class="grid" id="g-items"></div>
+
+    <script>
+        function pop(id, cls) {
+            let d = document.getElementById(id);
+            for(let y=0; y<=64; y+=32) {
+                for(let x=0; x<=320; x+=32) {
+                    let div = document.createElement('div');
+                    div.className = 'cell ' + cls;
+                    div.style.backgroundPosition = `-${x}px -${y}px`;
+                    div.title = `-${x}px -${y}px`;
+                    div.innerHTML = `<span style='font-size: 8px'>${x/32},${y/32}</span>`;
+                    d.appendChild(div);
+                }
+            }
+        }
+        pop('g-enemies', 'bg-enemies');
+        pop('g-smb', 'bg-smb');
+        pop('g-items', 'bg-items');
+    </script>
+</body>
+</html>

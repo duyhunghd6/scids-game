@@ -10,10 +10,20 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('science-human-skeleton', 'assets/science/human-skeleton.png');
     this.load.image('science-circuit-components', 'assets/science/circuit-components.png');
     this.load.spritesheet('player', 'assets/mario/mario_bros.png', { frameWidth: 16, frameHeight: 16 });
+    this.load.spritesheet('enemy', 'assets/mario/enemies.png', { frameWidth: 16, frameHeight: 16 });
   }
 
   create() {
     const { width, height } = this.scale;
+
+    this.anims.create({ key: 'idle', frames: this.anims.generateFrameNumbers('player', { start: 53, end: 53 }), frameRate: 1, repeat: -1 });
+    this.anims.create({ key: 'walk', frames: this.anims.generateFrameNumbers('player', { start: 54, end: 56 }), frameRate: 12, repeat: -1 });
+    this.anims.create({ key: 'jump', frames: this.anims.generateFrameNumbers('player', { start: 57, end: 57 }), frameRate: 1, repeat: -1 });
+    this.anims.create({ key: 'fall', frames: this.anims.generateFrameNumbers('player', { start: 58, end: 58 }), frameRate: 1, repeat: -1 });
+    this.anims.create({ key: 'hurt', frames: this.anims.generateFrameNumbers('player', { start: 59, end: 59 }), frameRate: 1, repeat: -1 });
+    this.anims.create({ key: 'victory', frames: this.anims.generateFrameNumbers('player', { start: 60, end: 60 }), frameRate: 1, repeat: -1 });
+
+    this.anims.create({ key: 'enemy_walk', frames: this.anims.generateFrameNumbers('enemy', { start: 50, end: 51 }), frameRate: 6, repeat: -1 });
 
     const bg = this.add.graphics();
     bg.fillGradientStyle(0x5C94FC, 0x5C94FC, 0x1a1a2e, 0x1a1a2e, 1);

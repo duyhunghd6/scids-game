@@ -267,14 +267,28 @@ export class MenuScene extends Phaser.Scene {
 
     if (isLeft) {
       this.player.setVelocityX(-200);
+      this.player.setFlipX(true);
     } else if (isRight) {
       this.player.setVelocityX(200);
+      this.player.setFlipX(false);
     } else {
       this.player.setVelocityX(0);
     }
 
     if (isUp && this.player.body.blocked.down) {
       this.player.setVelocityY(-450);
+    }
+
+    if (!this.player.body.blocked.down) {
+      if (this.player.body.velocity.y < 0) {
+        this.player.play('jump', true);
+      } else {
+        this.player.play('fall', true);
+      }
+    } else if (isLeft || isRight) {
+      this.player.play('walk', true);
+    } else {
+      this.player.play('idle', true);
     }
   }
 }

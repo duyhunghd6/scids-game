@@ -119,31 +119,46 @@
       
       <div class="scids-text-body">Protagonist Avatar (32x32 bounding boxes)</div>
       <div class="art-grid-container">
-        <div class="art-box-32" style="background-image: url('/assets/mario/mario_bros.png'); background-size: auto 64px; background-position: -64px 0;"><span class="art-state-badge">idle</span></div>
-        <div class="art-box-32" style="background-image: url('/assets/mario/mario_bros.png'); background-size: auto 64px; background-position: -128px 0;"><span class="art-state-badge">walk</span></div>
-        <div class="art-box-32" style="background-image: url('/assets/mario/mario_bros.png'); background-size: auto 64px; background-position: -256px 0;"><span class="art-state-badge">jump</span></div>
-        <div class="art-box-32" style="background-image: url('/assets/mario/mario_bros.png'); background-size: auto 64px; background-position: -320px 0;"><span class="art-state-badge">fall</span></div>
-        <div class="art-box-32" style="background-image: url('/assets/mario/mario_bros.png'); background-size: auto 64px; background-position: -384px 0;"><span class="art-state-badge">hurt</span></div>
-        <div class="art-box-32" style="background-image: url('/assets/mario/mario_bros.png'); background-size: auto 64px; background-position: -448px 0;"><span class="art-state-badge">victory</span></div>
+        <div class="art-box-32" style="background-image: url('/assets/mario/mario_bros.png'); image-rendering: pixelated; background-size: 1536px 2112px; background-position: -320px -128px;"><span class="art-state-badge">idle</span></div>
+        <div class="art-box-32" style="background-image: url('/assets/mario/mario_bros.png'); image-rendering: pixelated; background-size: 1536px 2112px; background-position: -384px -128px;"><span class="art-state-badge">walk</span></div>
+        <div class="art-box-32" style="background-image: url('/assets/mario/mario_bros.png'); image-rendering: pixelated; background-size: 1536px 2112px; background-position: -576px -128px;"><span class="art-state-badge">jump</span></div>
+        <div class="art-box-32" style="background-image: url('/assets/mario/mario_bros.png'); image-rendering: pixelated; background-size: 1536px 2112px; background-position: -640px -128px;"><span class="art-state-badge">fall</span></div>
+        <div class="art-box-32" style="background-image: url('/assets/mario/mario_bros.png'); image-rendering: pixelated; background-size: 1536px 2112px; background-position: -704px -128px;"><span class="art-state-badge">hurt</span></div>
+        <div class="art-box-32" style="background-image: url('/assets/mario/mario_bros.png'); image-rendering: pixelated; background-size: 1536px 2112px; background-position: -768px -128px;"><span class="art-state-badge">victory</span></div>
       </div>
 
       <div class="scids-text-body">Enemies & NPC Guides (16x16 / 32x32 logic)</div>
       <div class="art-grid-container">
-        <div class="art-box-16" style="background-image: url('/assets/mario/enemies.png'); background-size: auto 32px;"><span class="art-state-badge" style="top: -12px;">Enemy</span></div>
-        <div class="art-box-16" style="background-image: url('/assets/mario/smb_enemies_sheet.png'); background-size: auto 32px;"><span class="art-state-badge" style="top: -12px;">Enemy</span></div>
-        <div class="art-box-32" style="background-image: url('/assets/hub/telescope.png'); background-size: contain; background-repeat: no-repeat; border-width: 3px;"><span class="art-state-badge" style="top: -12px;">NPC Guide</span></div>
+        <!-- Earth Science: Magma Slime (Red Tint style, using Goomba as placeholder) -->
+        <div class="art-box-16 art-enemy-earth" style="background-image: url('/assets/mario/enemies.png'); image-rendering: pixelated; background-size: 1616px 256px; background-position: 0px -32px;"><span class="art-state-badge" style="top: -12px;">Magma Slime</span></div>
+        
+        <!-- Physical Science: Rusted Bot (Gray/Metallic style, using Koopa as placeholder) -->
+        <div class="art-box-16 art-enemy-physical" style="background-image: url('/assets/mario/smb_enemies_sheet.png'); image-rendering: pixelated; background-size: 872px 522px; background-position: 0px 0px;"><span class="art-state-badge" style="top: -12px;">Rusted Bot</span></div>
+
+        <div class="art-box-32 art-npc-guide" style="background-image: url('/assets/mario/mario_bros.png'); image-rendering: pixelated; background-size: 1536px 2112px;"><span class="art-state-badge" style="top: -12px;">NPC Guide</span></div>
+      </div>
+
+      <div class="scids-text-body" style="margin-top: var(--spacing-sm);">Knowledge Bosses</div>
+      <div class="art-grid-container">
+        <!-- Boss Placeholder (Procedural/Multi-part) -->
+        <div class="art-box-32 art-boss-placeholder"><span class="art-state-badge" style="top: -12px;">Darkness Monster</span></div>
       </div>
     </div>
 
     <!-- 8.2 Game Items & Collectibles -->
     <div class="ds-section scids-panel">
       <div class="scids-panel-header">8.2 Game Items & Collectibles</div>
-      <div class="scids-text-body">Items scale to 16x16 standard grid spaces</div>
+      
+      <div class="scids-text-body">Standard Pickups & Triggers (16x16)</div>
       <div class="art-grid-container">
-        <div class="art-box-16" style="border-radius: 50%; background-image: url('/assets/mario/item_objects.png'); background-position: -32px 0; background-size: auto 32px;"><span class="art-state-badge" style="top: -12px;">Coin</span></div>
-        <div class="art-box-16" style="background-image: url('/assets/mario/item_objects.png'); background-position: -64px 0; border-color: var(--color-secondary); background-size: auto 32px;"><span class="art-state-badge" style="top: -12px;">[ ? ]</span></div>
-        <div class="art-box-16" style="background-image: url('/assets/mario/item_objects.png'); background-position: -96px 0; background-size: auto 32px;"><span class="art-state-badge" style="top: -12px;">Suit</span></div>
-        <div class="art-box-16" style="background-image: url('/assets/mario/item_objects.png'); background-position: -128px 0; background-size: auto 32px;"><span class="art-state-badge" style="top: -12px;">Dash</span></div>
+        <div class="art-box-16" style="border-radius: 50%; background-image: url('/assets/mario/item_objects.png'); image-rendering: pixelated; background-size: 1152px 672px; background-position: -128px -32px;"><span class="art-state-badge" style="top: -12px;">Coin</span></div>
+        <div class="art-box-16 art-trigger" style="background-image: url('/assets/mario/item_objects.png'); image-rendering: pixelated; background-size: 1152px 672px; background-position: -192px -32px;"><span class="art-state-badge" style="top: -12px;">Quiz Box [?]</span></div>
+      </div>
+
+      <div class="scids-text-body" style="margin-top: var(--spacing-md);">Domain Power-Ups</div>
+      <div class="art-grid-container">
+        <div class="art-box-16 art-prop-magma" style="background-image: url('/assets/mario/item_objects.png'); image-rendering: pixelated; background-size: 1152px 672px; background-position: -32px -64px;"><span class="art-state-badge" style="top: -12px;">Magma Suit</span></div>
+        <div class="art-box-16 art-prop-photon" style="background-image: url('/assets/mario/item_objects.png'); image-rendering: pixelated; background-size: 1152px 672px; background-position: -256px 0px;"><span class="art-state-badge" style="top: -12px;">Photon Dash</span></div>
       </div>
     </div>
 
@@ -152,9 +167,9 @@
       <div class="scids-panel-header">8.3 Maps & Environments</div>
       <div class="scids-text-body">Layer Hierarchy Matrix (Tileset standard: 16x16)</div>
       <div class="art-grid-container" style="gap: 2px;">
-        <div class="art-box-32 art-layer-bg" style="background-image: url('/assets/mario/level_1.png'); background-size: 200px auto;"><span class="art-state-badge" style="background-color: var(--color-primary-dark);">BG Parallax</span></div>
-        <div class="art-box-32 art-layer-mg" style="background-image: url('/assets/mario/tile_set.png'); background-size: 200px auto;"><span class="art-state-badge" style="background-color: var(--color-primary-light);">MG Action</span></div>
-        <div class="art-box-32 art-layer-fg" style="background-image: url('/assets/mario/tile_set.png'); background-size: 200px auto; background-position: -30px -30px;"><span class="art-state-badge" style="background-color: var(--color-success);">FG Decor</span></div>
+        <div class="art-box-32 art-layer-bg" style="background-image: url('/assets/mario/level_1.png'); background-size: cover; background-position: center;"><span class="art-state-badge" style="background-color: var(--color-primary-dark);">BG Parallax</span></div>
+        <div class="art-box-32 art-layer-mg" style="background-image: url('/assets/mario/tile_set.png'); image-rendering: pixelated; background-size: 2112px 1792px; background-position: 0 0;"><span class="art-state-badge" style="background-color: var(--color-primary-light);">MG Action</span></div>
+        <div class="art-box-32 art-layer-fg" style="background-image: url('/assets/mario/tile_set.png'); image-rendering: pixelated; background-size: 2112px 1792px; background-position: -128px -128px;"><span class="art-state-badge" style="background-color: var(--color-success);">FG Decor</span></div>
       </div>
       <div class="scids-text-body" style="font-size: var(--font-size-sm); color: var(--color-secondary-light);">* Hub World maps omit action collision boundaries structurally.</div>
     </div>
